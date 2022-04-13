@@ -26,11 +26,13 @@ namespace wallet.ui
 
             WalletManager _WalletManager = new WalletManager();
 
-            BlockCoreWallet _WalletObject = new BlockCoreWallet();
+            NewWalletRequst _WalletObject = new NewWalletRequst();
+
+
 
             if (!string.IsNullOrEmpty(txt_Mnemonic.Text))
             {
-                _WalletObject.mnemonic = new NBitcoin.Mnemonic(txt_Mnemonic.Text.Trim());
+                _WalletObject.mnemonic = txt_Mnemonic.Text.Trim();
             }
             else
             {
@@ -75,7 +77,7 @@ namespace wallet.ui
 
             _WalletObject.NetworkName = "SeniorBlockCoinMain";
 
-            _WalletManager.RecoverWallet(_WalletObject);
+          //  _WalletManager.RecoverWallet(_WalletObject);
  
         }
     }

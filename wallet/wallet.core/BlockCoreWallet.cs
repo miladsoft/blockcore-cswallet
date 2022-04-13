@@ -1,5 +1,4 @@
-﻿
-using Blockcore.Features.Wallet.Types;
+﻿using Blockcore.Features.Wallet.Types;
 using NBitcoin;
 using System;
 using System.Collections.Generic;
@@ -9,39 +8,21 @@ using System.Threading.Tasks;
 
 namespace wallet.core
 {
-    public class BlockCoreWallet
+    public class NewWalletRequst
     {
         public String NetworkName { get; set; }
-        public Mnemonic mnemonic { get; set; }
+        public String mnemonic { get; set; }
         public String WalletName { get; set; }
         public String Password { get; set; }
-
-        public String Passphrase { get; set; }
-
-        public Key PrivateKey { get; set; }
-
-        public ExtPubKey accountExtPubKey { get; set; }
-
-        public DateTimeOffset CreationTime { get; set; }
-
-        public ExtKey SeedExtKey { get; set; }
-
-        public Blockcore.Features.Wallet.Types.HdAccount HdAccount { get; set; }
-
-        public List<Blockcore.Features.Wallet.Types.HdAddress> ReceivingAddresses { get; set; }
-
-        public List<Blockcore.Features.Wallet.Types.HdAddress> ChangeAddresses { get; set; }
-
-        public List<AdressData> AdressDatas { get; set; }
-        public List<AddressValue> AddressValues { get; set; }
-
+        public String Passphrase { get; set; }         
+        public DateTimeOffset CreationTime { get; set; } 
 
     }
+
 
     public class AdressData
     {
         public HdAddress HdAddress { get; set; }
-
         public List<AdressTrx> AdressTrxes { get; set; }
         public List<BlockInfo> blockInfo { get; set; }
     }
@@ -49,9 +30,42 @@ namespace wallet.core
     public class AddressValue
     {
         public HdAddress Address { get; set; }
- 
+
         public Double value { get; set; }
 
+    }
+
+    public class BlockInfo
+    {
+        public string blockHash { get; set; }
+        public int blockIndex { get; set; }
+        public int blockSize { get; set; }
+        public int blockTime { get; set; }
+        public string previousBlockHash { get; set; }
+        public bool syncComplete { get; set; }
+        public int transactionCount { get; set; }
+        public int confirmations { get; set; }
+        public string bits { get; set; }
+        public double difficulty { get; set; }
+        public string chainWork { get; set; }
+        public string merkleroot { get; set; }
+        public int nonce { get; set; }
+        public int version { get; set; }
+        public string posBlockSignature { get; set; }
+        public string posModifierv2 { get; set; }
+        public string posFlags { get; set; }
+        public string posHashProof { get; set; }
+        public string posBlockTrust { get; set; }
+        public string posChainTrust { get; set; }
+    }
+
+    public class AdressTrx
+    {
+        public string entryType { get; set; }
+        public string transactionHash { get; set; }
+        public int value { get; set; }
+        public int blockIndex { get; set; }
+        public int confirmations { get; set; }
     }
 
 }

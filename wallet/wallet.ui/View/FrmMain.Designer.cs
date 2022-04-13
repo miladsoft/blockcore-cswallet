@@ -28,12 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMain));
             this.btn_RecoverWallet = new System.Windows.Forms.Button();
             this.bnn_CreateWallet = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage0 = new System.Windows.Forms.TabPage();
+            this.Panel_Wallets = new System.Windows.Forms.Panel();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
@@ -43,16 +45,14 @@
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.Btn_AvailableNetworks = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.Wallet_Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Confirmed_Balance = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.UnConfirmed_Balance = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Timer_ReloadBalance = new System.Windows.Forms.Timer(this.components);
             this.groupBox1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage0.SuspendLayout();
             this.menuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // btn_RecoverWallet
@@ -83,7 +83,7 @@
             this.groupBox1.Controls.Add(this.btn_RecoverWallet);
             this.groupBox1.Location = new System.Drawing.Point(12, 27);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(657, 63);
+            this.groupBox1.Size = new System.Drawing.Size(778, 63);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             // 
@@ -100,25 +100,35 @@
             this.tabControl1.Location = new System.Drawing.Point(12, 96);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(661, 222);
+            this.tabControl1.Size = new System.Drawing.Size(781, 218);
             this.tabControl1.TabIndex = 3;
             // 
             // tabPage0
             // 
-            this.tabPage0.Controls.Add(this.dataGridView1);
+            this.tabPage0.Controls.Add(this.Panel_Wallets);
             this.tabPage0.Location = new System.Drawing.Point(4, 24);
             this.tabPage0.Name = "tabPage0";
-            this.tabPage0.Size = new System.Drawing.Size(653, 194);
+            this.tabPage0.Size = new System.Drawing.Size(773, 190);
             this.tabPage0.TabIndex = 4;
             this.tabPage0.Text = "Wallets";
             this.tabPage0.UseVisualStyleBackColor = true;
+            // 
+            // Panel_Wallets
+            // 
+            this.Panel_Wallets.AutoScroll = true;
+            this.Panel_Wallets.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Panel_Wallets.Location = new System.Drawing.Point(0, 0);
+            this.Panel_Wallets.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.Panel_Wallets.Name = "Panel_Wallets";
+            this.Panel_Wallets.Size = new System.Drawing.Size(773, 190);
+            this.Panel_Wallets.TabIndex = 0;
             // 
             // tabPage1
             // 
             this.tabPage1.Location = new System.Drawing.Point(4, 24);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(731, 275);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPage1.Size = new System.Drawing.Size(773, 190);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Send";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -127,8 +137,8 @@
             // 
             this.tabPage2.Location = new System.Drawing.Point(4, 24);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(731, 275);
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPage2.Size = new System.Drawing.Size(773, 190);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Receive";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -137,7 +147,7 @@
             // 
             this.tabPage3.Location = new System.Drawing.Point(4, 24);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(731, 275);
+            this.tabPage3.Size = new System.Drawing.Size(773, 190);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Transactions";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -146,28 +156,30 @@
             // 
             this.tabPage4.Location = new System.Drawing.Point(4, 24);
             this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(731, 275);
+            this.tabPage4.Size = new System.Drawing.Size(773, 190);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Cold Staking";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
             // statusStrip1
             // 
-            this.statusStrip1.Location = new System.Drawing.Point(0, 339);
+            this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 337);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(684, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(805, 22);
             this.statusStrip1.TabIndex = 4;
             this.statusStrip1.Text = "statusStrip1";
             // 
             // menuStrip1
             // 
+            this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.settingToolStripMenuItem,
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(684, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(805, 24);
             this.menuStrip1.TabIndex = 5;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -188,9 +200,24 @@
             // 
             // settingToolStripMenuItem
             // 
+            this.settingToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem1,
+            this.Btn_AvailableNetworks});
             this.settingToolStripMenuItem.Name = "settingToolStripMenuItem";
             this.settingToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
             this.settingToolStripMenuItem.Text = "Setting";
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(172, 6);
+            // 
+            // Btn_AvailableNetworks
+            // 
+            this.Btn_AvailableNetworks.Name = "Btn_AvailableNetworks";
+            this.Btn_AvailableNetworks.Size = new System.Drawing.Size(175, 22);
+            this.Btn_AvailableNetworks.Text = "Available Networks";
+            this.Btn_AvailableNetworks.Click += new System.EventHandler(this.Btn_AvailableNetworks_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -198,58 +225,23 @@
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "Help";
             // 
-            // dataGridView1
+            // Timer_ReloadBalance
             // 
-            this.dataGridView1.AllowUserToAddRows = false;
-            this.dataGridView1.AllowUserToDeleteRows = false;
-            this.dataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Wallet_Name,
-            this.Confirmed_Balance,
-            this.UnConfirmed_Balance});
-            this.dataGridView1.Location = new System.Drawing.Point(12, 12);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.RowTemplate.Height = 25;
-            this.dataGridView1.Size = new System.Drawing.Size(628, 170);
-            this.dataGridView1.TabIndex = 0;
-            // 
-            // Wallet_Name
-            // 
-            this.Wallet_Name.HeaderText = "Wallet Name";
-            this.Wallet_Name.Name = "Wallet_Name";
-            this.Wallet_Name.ReadOnly = true;
-            this.Wallet_Name.Width = 150;
-            // 
-            // Confirmed_Balance
-            // 
-            this.Confirmed_Balance.HeaderText = "Confirmed Balance";
-            this.Confirmed_Balance.Name = "Confirmed_Balance";
-            this.Confirmed_Balance.ReadOnly = true;
-            this.Confirmed_Balance.Width = 200;
-            // 
-            // UnConfirmed_Balance
-            // 
-            this.UnConfirmed_Balance.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.UnConfirmed_Balance.HeaderText = "UnConfirmed Balance";
-            this.UnConfirmed_Balance.Name = "UnConfirmed_Balance";
-            this.UnConfirmed_Balance.ReadOnly = true;
+            this.Timer_ReloadBalance.Enabled = true;
+            this.Timer_ReloadBalance.Tick += new System.EventHandler(this.Timer_ReloadBalance_Tick);
             // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(684, 361);
+            this.ClientSize = new System.Drawing.Size(805, 359);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.groupBox1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
-            this.MinimumSize = new System.Drawing.Size(700, 400);
+            this.MinimumSize = new System.Drawing.Size(699, 398);
             this.Name = "FrmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Blockcore Wallet";
@@ -259,7 +251,6 @@
             this.tabPage0.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -282,9 +273,9 @@
         private TabPage tabPage0;
         private ToolStripMenuItem settingToolStripMenuItem;
         private ToolStripMenuItem helpToolStripMenuItem;
-        private DataGridView dataGridView1;
-        private DataGridViewTextBoxColumn Wallet_Name;
-        private DataGridViewTextBoxColumn Confirmed_Balance;
-        private DataGridViewTextBoxColumn UnConfirmed_Balance;
+        private ToolStripSeparator toolStripMenuItem1;
+        private ToolStripMenuItem Btn_AvailableNetworks;
+        private Panel Panel_Wallets;
+        private System.Windows.Forms.Timer Timer_ReloadBalance;
     }
 }

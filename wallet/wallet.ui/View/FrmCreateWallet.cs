@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Blockcore.Networks;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -8,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using wallet.core;
+using wallet.ui.utility;
+using wallet.ui.View;
 
 namespace wallet.ui
 {
@@ -21,6 +24,9 @@ namespace wallet.ui
         private void btn_GenerateMnemonic_Click(object sender, EventArgs e)
         {
             txt_Mnemonic.Text = WalletManager.GenerateMnemonic(wordCount: 24).ToString();
+
+
+     
         }
 
         private void btn_Create_Click(object sender, EventArgs e)
@@ -31,17 +37,28 @@ namespace wallet.ui
 
             WalletManager _WalletManager = new WalletManager();
 
-            BlockCoreWallet _WalletObject = new BlockCoreWallet();
+            NewWalletRequst _WalletObject = new NewWalletRequst();
+
+            if (ChooseNetwork != null)
+            {
+                _WalletObject.NetworkName = ChooseNetwork.CoinTicker;
+            }
+            else
+            {
+                errorProviderCW.SetError(Btn_SelectedNetwork, "Please Selected Network");
+                return;
+            }
 
             if (!string.IsNullOrEmpty(txt_Mnemonic.Text))
             {
-                _WalletObject.mnemonic = new NBitcoin.Mnemonic(txt_Mnemonic.Text.Trim());
+                _WalletObject.mnemonic = txt_Mnemonic.Text.Trim();
             }
             else
             {
                 errorProviderCW.SetError(txt_Mnemonic, "Please generate Mnemonic");
                 return;
             }
+           
             //--------------------
 
             if (!string.IsNullOrEmpty(txt_Passphrase.Text))
@@ -78,7 +95,7 @@ namespace wallet.ui
             }
             //----------------------
 
-            _WalletObject.NetworkName = "SeniorBlockCoinMain";
+     
 
             Boolean _Success = _WalletManager.CreateNewWallet(_WalletObject);
             if (_Success == false)
@@ -86,6 +103,29 @@ namespace wallet.ui
                 MessageBox.Show("Wallet Not Created");
                 return;
             }
+
+            MessageBox.Show("Wallet Success Created");
+            Close();
+        }
+
+        private Network ChooseNetwork { set; get; }
+        private void Btn_SelectedCoin_Click(object sender, EventArgs e)
+        {
+            FrmAvailableNetworks FormSelectedNet = new FrmAvailableNetworks();
+            FormSelectedNet.ShowDialog();
+            if(FormSelectedNet.SelectedDialog == DialogResult.OK)
+            {
+                ChooseNetwork = FormSelectedNet.SelectedNetwork;
+                lbl_SelectedCoin.Text = ChooseNetwork.CoinTicker;
+                pictureBox1.Image = Utilities.LoadBase64(ChooseNetwork.FavoriteIcon());
+            }
+
+        }
+
+        private void FrmCreateWallet_Load(object sender, EventArgs e)
+        {
+            ChooseNetwork = null;
+           
         }
     }
 }

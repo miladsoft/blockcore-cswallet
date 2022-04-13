@@ -69,49 +69,6 @@ namespace wallet.core
         }
 
 
-        public async Task<Double> GetWalletBalance(BlockCoreWallet _BlockCoreWallet)
-        {
-            try
-            {
-                Double balance = 0;
-                foreach (var _adr in _BlockCoreWallet.ReceivingAddresses)
-                {
-                    balance += await GetAddressBalance(_adr.Bech32Address);
-                }
-
-                foreach (var _adr in _BlockCoreWallet.ChangeAddresses)
-                {
-                    balance += await GetAddressBalance(_adr.Bech32Address);
-                }
-
-                return balance;
-            }
-            catch { }
-            return 0;
-        }
-
-        public async Task<Double> GetAddressBalance(String SgwitAddress)
-        {
-            try
-            {
-                var client = new HttpClient();
-                var request = new HttpRequestMessage
-                {
-                    Method = HttpMethod.Get,
-                    RequestUri = new Uri("https://sbc.indexer.blockcore.net/api/query/address/" + SgwitAddress),
-                };
-                using (var response = await client.SendAsync(request))
-                {
-                    response.EnsureSuccessStatusCode();
-                    var body = await response.Content.ReadAsStringAsync();
-                    indexerAdress myDeserializedClass = JsonConvert.DeserializeObject<indexerAdress>(body.ToString());
-                    return myDeserializedClass.balance * 0.00000001;
-                }
-            }
-            catch { }
-            return 0;
-        }
-
         private string GetAccountHdPath(int coinType, int accountIndex)
         {
             return $"m/44'/{coinType}'/{accountIndex}'";
@@ -149,7 +106,7 @@ namespace wallet.core
             return extPubKey.PubKey;
         }
 
-        private IEnumerable<HdAddress> CreateAddresses(HdAccount hdAccount, String ExtendedPubKey, Network network, BlockCoreWallet _BlockCoreWallet, int addressesQuantity = 20, bool isChange = false)
+        private IEnumerable<HdAddress> CreateAddresses(HdAccount hdAccount, Network network, int addressesQuantity = 20, bool isChange = false)
         {
             ICollection<HdAddress> addresses = isChange ? hdAccount.InternalAddresses : hdAccount.ExternalAddresses;
 
@@ -166,7 +123,7 @@ namespace wallet.core
             for (int i = firstNewAddressIndex; i < firstNewAddressIndex + addressesQuantity; i++)
             {
                 // Retrieve the pubkey associated with the private key of this address index.
-                PubKey pubkey = GeneratePublicKey(ExtendedPubKey, i, isChange, network);
+                PubKey pubkey = GeneratePublicKey(hdAccount.ExtendedPubKey, i, isChange, network);
 
                 // Generate the P2PKH address corresponding to the pubkey.
                 BitcoinPubKeyAddress address = pubkey.GetAddress(network);
@@ -176,7 +133,7 @@ namespace wallet.core
                 var newAddress = new HdAddress
                 {
                     Index = i,
-                    HdPath = CreateHdPath(CoinType(_BlockCoreWallet.NetworkName), 0, isChange, i),
+                    HdPath = CreateHdPath(CoinType(network.CoinTicker), 0, isChange, i),
                     ScriptPubKey = address.ScriptPubKey,
                     Pubkey = pubkey.ScriptPubKey,
                     Bech32Address = witAddress.ToString(),
@@ -203,164 +160,186 @@ namespace wallet.core
 
 
 
-        public Boolean CreateNewWallet(BlockCoreWallet _WalletObject)
-        {         
-            String walletFilePath = Directory.GetCurrentDirectory() + @"\Wallets\"+ _WalletObject.WalletName + ".wallet.json";
 
-            if (File.Exists(walletFilePath))
-                return false;
-
-            try
-            {
-
-                _WalletObject.CreationTime = DateTimeOffset.UtcNow;
-                ExtKey extendedKey = _WalletObject.mnemonic.DeriveExtKey(_WalletObject.Passphrase);
-                _WalletObject.SeedExtKey = extendedKey;
-                string encryptedSeed = extendedKey.PrivateKey.GetEncryptedBitcoinSecret(_WalletObject.Password, GetNetwork(_WalletObject.NetworkName)).ToWif();
-
-                string accountHdPath = GetAccountHdPath(CoinType(_WalletObject.NetworkName), 0);
-                _WalletObject.PrivateKey = DecryptSeed(encryptedSeed, _WalletObject.Password, GetNetwork(_WalletObject.NetworkName));
-                _WalletObject.accountExtPubKey = GetExtendedPublicKey(_WalletObject.PrivateKey, extendedKey.ChainCode, accountHdPath);
-
-
-                _WalletObject.ReceivingAddresses = new List<HdAddress>();
-                _WalletObject.ChangeAddresses = new List<HdAddress>();
-
-                GetAllAccountAndAdress(_WalletObject);
-
-                return Save(_WalletObject);
-            }
-            catch { }
-            return false;
-        }
-
-        private void GetAllAccountAndAdress(BlockCoreWallet _WalletObject)
+        private void GetAllAccountAndAdress(WalletFile _WalletObject, String Password, String mnemonic, String Passphrase)
         {
             String newAccountName = AccountName;
-            string accountHdPath = GetAccountHdPath(CoinType(_WalletObject.NetworkName), 0);
+            string accountHdPath = GetAccountHdPath(CoinType(_WalletObject.Network), 0);
+
+
+            ExtKey extendedKey = new Mnemonic(mnemonic).DeriveExtKey(Passphrase);
+            var privateKey = extendedKey.PrivateKey;
+            var chainCode = extendedKey.ChainCode;
+            string encryptedSeed = extendedKey.PrivateKey.GetEncryptedBitcoinSecret(Password, GetNetwork(_WalletObject.Network)).ToWif();
+
+            var PrivateKey = DecryptSeed(encryptedSeed, Password, GetNetwork(_WalletObject.Network));
+            var accountExtPubKey = GetExtendedPublicKey(PrivateKey, extendedKey.ChainCode, accountHdPath);
+
+
+
+
+            var _network = GetNetwork(_WalletObject.Network);
 
             HdAccount _HdAccount = new HdAccount
             {
                 Index = 0,
-                ExtendedPubKey = _WalletObject.accountExtPubKey.ToString(GetNetwork(_WalletObject.NetworkName)),
+                ExtendedPubKey = accountExtPubKey.ToString(GetNetwork(_WalletObject.Network)),
                 ExternalAddresses = new List<HdAddress>(),
                 InternalAddresses = new List<HdAddress>(),
                 Name = newAccountName,
                 HdPath = accountHdPath,
-                CreationTime = _WalletObject.CreationTime
+                CreationTime = DateTimeOffset.UtcNow
             };
 
-            _WalletObject.HdAccount = _HdAccount;
+            _WalletObject.hdAccount = _HdAccount;
 
-            _WalletObject.ReceivingAddresses = new List<HdAddress>();
-            _WalletObject.ChangeAddresses = new List<HdAddress>();
+
             // unused
-            _WalletObject.ReceivingAddresses.AddRange(CreateAddresses(_HdAccount, _WalletObject.accountExtPubKey.ToString(GetNetwork(_WalletObject.NetworkName)), GetNetwork(_WalletObject.NetworkName), _WalletObject));
+            //_WalletObject.hdAccount.ExternalAddresses.AddRange();
+            CreateAddresses(_HdAccount, _network, 20);
+            CreateAddresses(_HdAccount, _network, 20, true);
 
             //changed
-            _WalletObject.ChangeAddresses.AddRange(CreateAddresses(_HdAccount, _WalletObject.accountExtPubKey.ToString(GetNetwork(_WalletObject.NetworkName)), GetNetwork(_WalletObject.NetworkName), _WalletObject, 20, true));
+            //   _WalletObject.hdAccount.InternalAddresses.AddRange(CreateAddresses(_HdAccount, _WalletObject.accountExtPubKey.ToString(GetNetwork(_WalletObject.NetworkName)), GetNetwork(_WalletObject.NetworkName), _WalletObject, 20, true));
 
         }
 
-        public Boolean Save(BlockCoreWallet _BlockCoreWallet)
+        public static String WalletDirectory = Directory.GetCurrentDirectory() + @"\Wallets\";
+
+        public Boolean Save(WalletFile walletFile)
         {
-            var directoryPath = Directory.GetCurrentDirectory() + @"\Wallets\";
-            String walletFilePath = directoryPath + _BlockCoreWallet.WalletName + ".wallet.json";
+
+
+            if (Directory.Exists(WalletDirectory) == false)
+            {
+                Directory.CreateDirectory(WalletDirectory);
+            }
+
+            String walletFilePath = WalletDirectory + walletFile.Name + ".wallet.json";
+
             if (File.Exists(walletFilePath))
                 return false;
+
 
             try
             {
 
-                if (!Directory.Exists( directoryPath)) Directory.CreateDirectory(directoryPath);
+                var directoryPath = Path.GetDirectoryName(Path.GetFullPath(walletFilePath));
+                if (directoryPath != null) Directory.CreateDirectory(directoryPath);
 
-                var privateKey = _BlockCoreWallet.SeedExtKey.PrivateKey;
-                var chainCode = _BlockCoreWallet.SeedExtKey.ChainCode;
+                return WalletFileSerializer.Serialize(walletFile);
 
-                var encryptedBitcoinPrivateKeyString = privateKey.GetEncryptedBitcoinSecret(_BlockCoreWallet.Password, GetNetwork(_BlockCoreWallet.NetworkName)).ToWif();
-                var chainCodeString = Convert.ToBase64String(chainCode);
 
-                var networkString = GetNetwork(_BlockCoreWallet.NetworkName).ToString();
-
-                var creationTimeString = _BlockCoreWallet.CreationTime.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
-
-                WalletFileSerializer.Serialize(
-                    walletFilePath,
-                    encryptedBitcoinPrivateKeyString,
-                    chainCodeString,
-                    networkString,
-                    creationTimeString);
-
-                return true;
             }
             catch { }
             return false;
         }
 
-        public BlockCoreWallet LoadWallet(BlockCoreWallet _WalletObject)
+
+        public Boolean CreateNewWallet(NewWalletRequst _NewWalletRequst)
         {
-            var directoryPath = Directory.GetCurrentDirectory() + @"\Wallets\";
-            String walletFilePath = directoryPath + _WalletObject.WalletName + ".wallet.json";
-            if (!File.Exists(walletFilePath))
-                return null;
+            if (Directory.Exists(WalletDirectory) == false)
+            {
+                Directory.CreateDirectory(WalletDirectory);
+            }
+
+            String walletFilePath = WalletDirectory + _NewWalletRequst.WalletName + ".wallet.json";
+
+            if (File.Exists(walletFilePath))
+                return false;
+
+
             try
             {
 
-                var walletFileRawContent = WalletFileSerializer.Deserialize(walletFilePath);
-                var encryptedBitcoinPrivateKeyString = walletFileRawContent.EncryptedSeed;
-                var chainCodeString = walletFileRawContent.ChainCode;
-                var chainCode = Convert.FromBase64String(chainCodeString);
-                var networkString = walletFileRawContent.Network;
-                DateTimeOffset creationTime = DateTimeOffset.ParseExact(walletFileRawContent.CreationTime, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+
+                ExtKey extendedKey = new Mnemonic(_NewWalletRequst.mnemonic).DeriveExtKey(_NewWalletRequst.Passphrase);
+                var privateKey = extendedKey.PrivateKey;
+                var chainCode = extendedKey.ChainCode;
+                string encryptedSeed = extendedKey.PrivateKey.GetEncryptedBitcoinSecret(_NewWalletRequst.Password, GetNetwork(_NewWalletRequst.NetworkName)).ToWif();
+                string accountHdPath = GetAccountHdPath(CoinType(_NewWalletRequst.NetworkName), 0);
+                var PrivateKey = DecryptSeed(encryptedSeed, _NewWalletRequst.Password, GetNetwork(_NewWalletRequst.NetworkName));
+                var accountExtPubKey = GetExtendedPublicKey(PrivateKey, extendedKey.ChainCode, accountHdPath);
 
 
-                BlockCoreWallet _BlockCoreWallet = new BlockCoreWallet();
-                _BlockCoreWallet.WalletName = _WalletObject.WalletName;
-                _BlockCoreWallet.Password = _WalletObject.Password;
-                _BlockCoreWallet.CreationTime = creationTime;
-                _BlockCoreWallet.NetworkName = walletFileRawContent.Network;
-                _BlockCoreWallet.PrivateKey = Key.Parse(encryptedBitcoinPrivateKeyString, _WalletObject.Password, GetNetwork(walletFileRawContent.Network));
-                _BlockCoreWallet.SeedExtKey = new ExtKey(_BlockCoreWallet.PrivateKey, chainCode);
-                _BlockCoreWallet.mnemonic = _WalletObject.mnemonic;
-                string accountHdPath = GetAccountHdPath(CoinType(_BlockCoreWallet.NetworkName), 0);
-                _BlockCoreWallet.accountExtPubKey = GetExtendedPublicKey(_BlockCoreWallet.PrivateKey, _BlockCoreWallet.SeedExtKey.ChainCode, accountHdPath);
+                WalletFile walletFile = new WalletFile();
+                walletFile.Name = _NewWalletRequst.WalletName;
+                walletFile.Network = _NewWalletRequst.NetworkName;
+                walletFile.EncryptedSeed = encryptedSeed;
+                walletFile.coinType = CoinType(_NewWalletRequst.NetworkName);
+                var chainCodeString = Convert.ToBase64String(chainCode);
+                walletFile.ChainCode = chainCodeString;
+                walletFile.ConfirmedAmount = 0;
+                walletFile.UnConfirmedAmount = 0;
+                walletFile.UnspentOutputReferences = new List<UnspentOutputReference>();
 
+                walletFile.CreationTime = DateTimeOffset.UtcNow.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+                GetAllAccountAndAdress(walletFile, _NewWalletRequst.Password, _NewWalletRequst.mnemonic, _NewWalletRequst.Passphrase);
 
-                GetAllAccountAndAdress(_BlockCoreWallet);
-
-
-                return _BlockCoreWallet;
+                return Save(walletFile);
             }
             catch { }
-            return new BlockCoreWallet();
+            return false;
         }
 
 
-        public void RecoverWallet(BlockCoreWallet _WalletObject)
+        public List<WalletFile> GetAllWalletInStore()
         {
-            CreateNewWallet(_WalletObject);
-        }
-
-
-        public Network GetNetwork(String _NetworkName = "SeniorBlockCoinMain")
-        {
-            //Network networkSBC = Blockcore.Networks.SeniorBlockCoin.Networks.Networks.SeniorBlockCoin.Mainnet();
-
-            if (_NetworkName == "SeniorBlockCoinMain")
+            List<WalletFile> _wallets = new List<WalletFile>();
+            try
             {
-                return Blockcore.Networks.SeniorBlockCoin.Networks.Networks.SeniorBlockCoin.Mainnet();
+                if (Directory.Exists(Directory.GetCurrentDirectory() + @"\Wallets\") == true)
+                {
+                    String _Path = Directory.GetCurrentDirectory() + @"\Wallets\";
+
+                    foreach (var _walletFile in Directory.GetFiles(_Path, "*.json"))
+                    {
+                        try
+                        {
+                            WalletFile _Temp = LoadWallet(_walletFile);
+                            _wallets.Add(_Temp);
+                        }
+                        catch { }
+                    }
+
+                }
             }
+            catch { }
 
-            return Blockcore.Networks.SeniorBlockCoin.Networks.Networks.SeniorBlockCoin.Mainnet();
+            return _wallets;
         }
-        public int CoinType(String _NetworkName = "SeniorBlockCoinMain")
+
+        public WalletFile LoadWallet(String walletFilePath)
         {
-            if (_NetworkName == "SeniorBlockCoinMain")
-            { return 5006; }
 
+            if (File.Exists(walletFilePath) == false)
+                return new WalletFile();
+            try
+            {
 
+                WalletFile _WalletFile = WalletFileSerializer.Deserialize(walletFilePath);
 
-            return 5006;
+                return _WalletFile;
+            }
+            catch { }
+            return new WalletFile();
         }
+
+        public int CoinType(string networkName)
+        {
+            return new BlockCoreNetworks().CoinType(GetNetwork(networkName));
+        }
+
+        public Network GetNetwork(string network)
+        {
+            return new BlockCoreNetworks().GetAllNetworks().First(li => li.CoinTicker == network);
+        }
+
+        public Boolean RecoverWallet(NewWalletRequst _WalletObject)
+        {
+            return CreateNewWallet(_WalletObject);
+        }
+
+
     }
 }
