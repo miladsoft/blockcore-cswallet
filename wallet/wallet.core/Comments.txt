@@ -1,0 +1,182 @@
+﻿
+
+/*
+
+   //var _Taret = BitcoinAddress.Create(_TargetAddress, _Network);
+
+                //TxIn _TxIn = new TxIn(changeAddress.ScriptPubKey);
+                //TxOut _TxOut = new TxOut(Amount, _Taret.ScriptPubKey);
+
+
+                //Transaction TransactionNew = new Transaction();
+                //TransactionNew.AddInput(_TxIn);
+                //TransactionNew.AddOutput(_TxOut);
+
+                //context.TransactionBuilder.AddCoins(TransactionNew);
+                //context.TransactionBuilder.AddKeys(new Key[] { extendedKey.PrivateKey });
+
+
+
+
+
+
+   //NodeSettings nodeSettings = new NodeSettings(_Network);
+                //     LoggerFactory loggerFactory = new LoggerFactory();
+                //Blockcore.Consensus.Chain.ChainIndexer chainIndexer = new Blockcore.Consensus.Chain.ChainIndexer(_Network);
+                //WalletFeePolicy walletFeePolicy = new WalletFeePolicy(nodeSettings);
+                //StandardTransactionPolicy transactionPolicy = new StandardTransactionPolicy(_Network);
+                //WalletSettings walletSettings = new WalletSettings(nodeSettings);
+                //DataFolder dataFolder = new DataFolder(@"\wallet\");
+                //Blockcore.AsyncWork.AsyncProvider asyncWork = new Blockcore.AsyncWork.AsyncProvider(loggerFactory,new Blockcore.Signals.Signals());
+                //Blockcore.Features.Wallet.WalletManager walletManager = new Blockcore.Features.Wallet.WalletManager(
+                //    loggerFactory ,_Network, chainIndexer ,walletSettings ,dataFolder , walletFeePolicy ,asyncProvider:new  asyncp
+                //    );
+
+
+                var _Taret = BitcoinAddress.Create(_TargetAddress, _Network);
+
+                TxIn _TxIn = new TxIn(changeAddress.ScriptPubKey);
+                TxOut _TxOut = new TxOut(Amount, _Taret.ScriptPubKey);
+
+
+                Transaction transaction1 = new Transaction();
+                transaction1.AddInput(_TxIn);
+                transaction1.AddOutput(_TxOut);
+
+                OutPoint outPoint = new OutPoint(transaction1, 0);
+
+
+                UnspentOutputReference _out = new UnspentOutputReference();
+                _out.Transaction = new TransactionOutputData();
+                _out.Transaction.Address = _TargetAddress;
+                _out.Transaction.Amount = Amount;
+                _out.Transaction.ScriptPubKey = _Taret.ScriptPubKey;
+
+
+                _out.Account = _BlockCoreWallet.HdAccount;
+                _out.Address = changeAddress;
+
+                context.UnspentOutputs = new List<UnspentOutputReference>();
+                // 
+                //  context.UnspentOutputs.Add(_out);
+                // context.SelectedInputs.Add(outPoint);
+                context.UnspentOutputs.Add(_out);
+
+
+
+
+
+
+                
+ return;
+
+
+            var _network = Blockcore.Networks.SeniorBlockCoin.Networks.Networks.SeniorBlockCoin.Mainnet();
+            // Let’s me introduce you, Alice, Bob, Satoshi, and Nico with their private keys.
+
+            var _TaretAddress = BitcoinAddress.Create(_TargetBech32Address, _network);
+            var _SourceAddress = BitcoinAddress.Create(_MyBech32Address, _network);
+            var _ChangedAddress = BitcoinAddress.Create(_ChangedBech32Address, _network);
+            ExtKey extendedKey = _WalletObject.mnemonic.DeriveExtKey(_WalletObject.Passphrase);
+
+         
+
+            decimal _Fee = 0;
+
+            if (Money.Parse("9.9999") == null)
+            {
+                _Fee = new Money(_network.MinTxFee).ToDecimal(MoneyUnit.BTC);
+            }
+        
+           
+
+ 
+
+            TransactionBuilder txBuilder = new TransactionBuilder(_network);
+            Transaction tx = txBuilder
+                .AddCoins(AddCoin(_network, _SourceAddress))
+                .AddKeys(_WalletObject.PrivateKey)
+                .Send(_TaretAddress, Money.Parse("9.999"))
+                .SendFees(Money.Parse("0.0001"))
+                .SetChange(_TaretAddress)
+                .BuildTransaction(true);
+
+            TransactionPolicyError[] errors = null;
+            if (!txBuilder.Verify(tx, out errors))
+                Console.WriteLine("Couldn't build the transaction.");
+
+             var _TX = tx.GetHash().ToString();
+            var transactionHex = tx.ToHex();
+
+            int _A = 10;
+
+
+
+
+
+            //Transaction aliceFunding = new Transaction()
+            //{
+            //    Inputs =
+            //    {
+            //        new TxIn (changeAddress.ScriptPubKey)
+            //    }
+            //    ,
+
+            //    Outputs =
+            //{
+            //    new TxOut("9", _Taret.ScriptPubKey)
+            //}
+
+            //};
+            //Coin[] MainAddressCoins = aliceFunding 
+            //                        .Outputs
+            //                        .Select((o, i) => new Coin(new OutPoint(aliceFunding.GetHash(), i), o))
+            //                        .ToArray();
+            ////   var fee = aliceFunding.GetFee(MainAddressCoins);
+            //ExtKey extendedKey = _WalletObject.mnemonic.DeriveExtKey(_WalletObject.Passphrase);
+            //var fee = aliceFunding.GetFee(MainAddressCoins);
+            //var txBuilder = new TransactionBuilder(_network);
+            //var tx = txBuilder
+            //    .AddCoins(MainAddressCoins)
+            //    .AddKeys(extendedKey.PrivateKey)
+            //    .Send(_Taret.ScriptPubKey.GetScriptAddress(_network), "9")
+            //    .SendFees("0.0001")
+            //    .SetChange(changeAddress.ScriptPubKey)
+            //    .BuildTransaction(true);
+
+            //var _TX = tx.GetHash().ToString();
+            //var transactionHex = tx.ToHex();
+
+
+
+
+
+{
+
+  "password": "P@@sword!!200",
+  "segwitChangeAddress": true,
+  "walletName": "WalletSBC",
+  "accountName": "account 0", 
+  "recipients": [
+    {
+      "destinationAddress": "sbc1qtppzhz32watt6255aq0zld7e4jpcl6yn2m7em8",
+      "amount": "9.999"
+    }
+  ],
+  "opReturnData": "",
+  "opReturnDataIsHex": true,
+
+  "feeType": "low",
+  "allowUnconfirmed": true,
+  "shuffleOutputs": true,
+}
+
+
+
+
+
+{
+  "fee": 10000,
+  "hex": "01000000d3a74e6200010138ecd19af24cc2564653d6dd664a374ac0b199d8560dbb0fac385b38478b84e70100000000ffffffff036043993b0000000016001458422b8a2a7756bd2a94e81e2fb7d9ac838fe8930000000000000000026a00905f010000000000160014d264dc1fd05ac6dcccb7b29f56b24a8a145fa64f0247304402204ab63b6ca99e156983d214c18a88ad1a00e832941b96f1798a2bb9a60993cf300220670146dc660fe507425a6d1eef6a175f9d95ea95c8eebdf8b80e3c3b7557e74f012103faf77c95d4d4d3bf4887cb640717418fac051c324a36665b693d91cc931a825900000000",
+  "transactionId": "151be332e9489bf2b19ab76caf99c3f19e616678ac8681815fca11952f1a45d3"
+}
