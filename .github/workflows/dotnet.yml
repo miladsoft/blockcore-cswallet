@@ -11,6 +11,8 @@ jobs:
 
     runs-on: windows-latest
 
+    env:
+      Solution_Name: wallet\wallet.sln  
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
@@ -18,8 +20,8 @@ jobs:
       with:
         dotnet-version: 6.0.x
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore $env:Solution_Name
     - name: Build
-      run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet build $env:Solution_Name --no-restore
+#     - name: Test
+#       run: dotnet test --no-build --verbosity normal
