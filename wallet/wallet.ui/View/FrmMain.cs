@@ -13,13 +13,7 @@ namespace wallet.ui
             InitializeComponent();
         }
 
-        private void bnn_CreateWallet_Click(object sender, EventArgs e)
-        {
-            FrmCreateWallet frm = new FrmCreateWallet();
-            frm.ShowDialog();
 
-
-        }
 
         private void btn_RecoverWallet_Click(object sender, EventArgs e)
         {
@@ -93,6 +87,18 @@ namespace wallet.ui
 
             processWalletMoney.StartUpdate();
 
+        }
+
+        private async void bnn_CreateWallet_Click(object sender, EventArgs e)
+        {
+            FrmCreateWallet frm = new FrmCreateWallet();
+            frm.ShowDialog();
+            await _LoadAllWallets();
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }

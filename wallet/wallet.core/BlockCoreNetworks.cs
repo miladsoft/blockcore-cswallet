@@ -20,6 +20,15 @@ namespace wallet.core
             return networks;
         }
 
+        public Network GetNetwork(String Networkname)
+        {
+
+
+            return GetAllNetworks().First(li => li.CoinTicker == Networkname);
+        }
+
+
+
         public int CoinType(Network network)
         {            
             if (network.CoinTicker == "SBC")
@@ -45,7 +54,7 @@ namespace wallet.core
 
         public String GetIndexerUrl(Network network)
         {
-            return @"https://" + network.CoinTicker + IndexerUrl();
+            return @"https://" + network.CoinTicker + "." + IndexerUrl() + @"/";
         }
 
 

@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmAvailableNetworks));
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
@@ -45,8 +46,9 @@
             this.panel1.Controls.Add(this.label1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(591, 29);
+            this.panel1.Size = new System.Drawing.Size(517, 22);
             this.panel1.TabIndex = 0;
             // 
             // label1
@@ -54,7 +56,7 @@
             this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label1.Location = new System.Drawing.Point(0, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(591, 29);
+            this.label1.Size = new System.Drawing.Size(517, 22);
             this.label1.TabIndex = 0;
             this.label1.Text = "Available Networks";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -64,9 +66,10 @@
             this.panel2.BackColor = System.Drawing.Color.LightGray;
             this.panel2.Controls.Add(this.lbl_info);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel2.Location = new System.Drawing.Point(0, 325);
+            this.panel2.Location = new System.Drawing.Point(0, 244);
+            this.panel2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(591, 29);
+            this.panel2.Size = new System.Drawing.Size(517, 22);
             this.panel2.TabIndex = 1;
             // 
             // lbl_info
@@ -74,16 +77,17 @@
             this.lbl_info.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lbl_info.Location = new System.Drawing.Point(0, 0);
             this.lbl_info.Name = "lbl_info";
-            this.lbl_info.Size = new System.Drawing.Size(591, 29);
+            this.lbl_info.Size = new System.Drawing.Size(517, 22);
             this.lbl_info.TabIndex = 0;
             this.lbl_info.Text = "double click in item";
             this.lbl_info.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // listView_networks
             // 
-            this.listView_networks.Location = new System.Drawing.Point(209, 134);
+            this.listView_networks.Location = new System.Drawing.Point(183, 100);
+            this.listView_networks.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.listView_networks.Name = "listView_networks";
-            this.listView_networks.Size = new System.Drawing.Size(151, 121);
+            this.listView_networks.Size = new System.Drawing.Size(133, 92);
             this.listView_networks.TabIndex = 2;
             this.listView_networks.UseCompatibleStateImageBehavior = false;
             this.listView_networks.DoubleClick += new System.EventHandler(this.listView_networks_DoubleClick);
@@ -97,14 +101,16 @@
             // 
             // FrmAvailableNetworks
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(591, 354);
+            this.ClientSize = new System.Drawing.Size(517, 266);
             this.Controls.Add(this.listView_networks);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "FrmAvailableNetworks";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Available Networks";

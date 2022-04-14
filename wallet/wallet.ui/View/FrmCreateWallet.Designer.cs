@@ -76,7 +76,7 @@
             // lbl_SelectedCoin
             // 
             this.lbl_SelectedCoin.AutoSize = true;
-            this.lbl_SelectedCoin.Location = new System.Drawing.Point(385, 24);
+            this.lbl_SelectedCoin.Location = new System.Drawing.Point(312, 194);
             this.lbl_SelectedCoin.Name = "lbl_SelectedCoin";
             this.lbl_SelectedCoin.Size = new System.Drawing.Size(71, 15);
             this.lbl_SelectedCoin.TabIndex = 10;
@@ -84,42 +84,44 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(351, 18);
+            this.pictureBox1.Location = new System.Drawing.Point(278, 188);
             this.pictureBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(28, 28);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.Size = new System.Drawing.Size(28, 24);
             this.pictureBox1.TabIndex = 9;
             this.pictureBox1.TabStop = false;
             // 
             // txt_Password
             // 
             this.txt_Password.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txt_Password.Location = new System.Drawing.Point(104, 189);
+            this.txt_Password.Location = new System.Drawing.Point(104, 161);
             this.txt_Password.Name = "txt_Password";
             this.txt_Password.Size = new System.Drawing.Size(350, 23);
             this.txt_Password.TabIndex = 8;
+            this.txt_Password.Text = "P@@sword!!200";
             // 
             // txt_Name
             // 
             this.txt_Name.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txt_Name.Location = new System.Drawing.Point(104, 160);
+            this.txt_Name.Location = new System.Drawing.Point(104, 132);
             this.txt_Name.Name = "txt_Name";
             this.txt_Name.Size = new System.Drawing.Size(350, 23);
             this.txt_Name.TabIndex = 7;
+            this.txt_Name.Text = "WalletSBC";
             // 
             // txt_Passphrase
             // 
             this.txt_Passphrase.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txt_Passphrase.Location = new System.Drawing.Point(104, 131);
+            this.txt_Passphrase.Location = new System.Drawing.Point(104, 103);
             this.txt_Passphrase.Name = "txt_Passphrase";
             this.txt_Passphrase.Size = new System.Drawing.Size(350, 23);
             this.txt_Passphrase.TabIndex = 6;
+            this.txt_Passphrase.Text = "P@@sword!!200";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(38, 192);
+            this.label4.Location = new System.Drawing.Point(38, 164);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(57, 15);
             this.label4.TabIndex = 5;
@@ -128,7 +130,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(56, 163);
+            this.label3.Location = new System.Drawing.Point(56, 135);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(39, 15);
             this.label3.TabIndex = 4;
@@ -137,7 +139,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(29, 134);
+            this.label2.Location = new System.Drawing.Point(29, 106);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(65, 15);
             this.label2.TabIndex = 3;
@@ -146,7 +148,7 @@
             // Btn_SelectedNetwork
             // 
             this.Btn_SelectedNetwork.ForeColor = System.Drawing.Color.Navy;
-            this.Btn_SelectedNetwork.Location = new System.Drawing.Point(104, 18);
+            this.Btn_SelectedNetwork.Location = new System.Drawing.Point(104, 188);
             this.Btn_SelectedNetwork.Name = "Btn_SelectedNetwork";
             this.Btn_SelectedNetwork.Size = new System.Drawing.Size(138, 26);
             this.Btn_SelectedNetwork.TabIndex = 2;
@@ -156,8 +158,9 @@
             // 
             // btn_GenerateMnemonic
             // 
+            this.btn_GenerateMnemonic.Enabled = false;
             this.btn_GenerateMnemonic.ForeColor = System.Drawing.Color.Navy;
-            this.btn_GenerateMnemonic.Location = new System.Drawing.Point(459, 54);
+            this.btn_GenerateMnemonic.Location = new System.Drawing.Point(459, 26);
             this.btn_GenerateMnemonic.Name = "btn_GenerateMnemonic";
             this.btn_GenerateMnemonic.Size = new System.Drawing.Size(119, 70);
             this.btn_GenerateMnemonic.TabIndex = 2;
@@ -168,7 +171,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(30, 57);
+            this.label1.Location = new System.Drawing.Point(30, 29);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(65, 15);
             this.label1.TabIndex = 1;
@@ -177,11 +180,13 @@
             // txt_Mnemonic
             // 
             this.txt_Mnemonic.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txt_Mnemonic.Location = new System.Drawing.Point(104, 54);
+            this.txt_Mnemonic.Location = new System.Drawing.Point(104, 26);
             this.txt_Mnemonic.Multiline = true;
             this.txt_Mnemonic.Name = "txt_Mnemonic";
             this.txt_Mnemonic.Size = new System.Drawing.Size(350, 70);
             this.txt_Mnemonic.TabIndex = 0;
+            this.txt_Mnemonic.Text = "travel west flush element churn hunt certain need frame noodle aisle slender jewe" +
+    "l museum universe amused happy ability lyrics finger behave roast surge zebra";
             // 
             // groupBox2
             // 

@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using wallet.core;
 using wallet.ui.utility;
+using wallet.ui.View;
 
 namespace wallet.ui.Elements
 {
@@ -72,12 +73,32 @@ namespace wallet.ui.Elements
             }
             catch { }
 
+            MyWallet.ConfirmedAmount = balanceConfirmedAmount;
+            MyWallet.UnConfirmedAmount = balanceUnConfirmedAmount;
+
 
             lbl_Confirmed.Text = balanceConfirmedAmount.ToString();
 
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Btn_Send_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                FrmSend _FrmWallet = new FrmSend();
+                _FrmWallet.MyWallet = MyWallet;
+                _FrmWallet.Show();
+            }
+            catch { }
+
+        }
+
+        private void Lbl_NetworkName_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lbl_walletname_Click(object sender, EventArgs e)
         {
 
         }
