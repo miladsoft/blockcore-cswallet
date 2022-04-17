@@ -49,26 +49,15 @@ namespace wallet.ui.Elements
             try
             {
 
-                foreach (var _adr in MyWallet.hdAccount.InternalAddresses)
-                { 
-                    try
-                    {
-                        var balance = addressBalances.First(li => li.address == _adr.Bech32Address);
-                        balanceConfirmedAmount += (balance.balance * 0.00000001);
-                    }
-                    catch { }
-                }
-
-
-                foreach (var _adr in MyWallet.hdAccount.ExternalAddresses)
+                foreach (var _adr in addressBalances)
                 {
                     try
                     {
-                        var balance = addressBalances.First(li => li.address == _adr.Bech32Address);
-                        balanceConfirmedAmount += (balance.balance * 0.00000001);
+                        balanceConfirmedAmount += (_adr.balance * 0.00000001);
                     }
                     catch { }
                 }
+
 
             }
             catch { }
@@ -87,20 +76,37 @@ namespace wallet.ui.Elements
             {
                 FrmSend _FrmWallet = new FrmSend();
                 _FrmWallet.MyWallet = MyWallet;
+                _FrmWallet.addressBalances = addressBalances;
                 _FrmWallet.Show();
             }
             catch { }
-
         }
 
-        private void Lbl_NetworkName_Click(object sender, EventArgs e)
+        private async void Btn_getBalance_ClickAsync(object sender, EventArgs e)
         {
+            try
+            {
+                Btn_getBalance.Enabled = false;
+                lbl_status.Text = "calculate balance . wait";
+                DateTime _Strat = DateTime.Now;
 
-        }
+                addressBalances = new List<AddressBalance>();
 
-        private void lbl_walletname_Click(object sender, EventArgs e)
-        {
+                foreach (var walletfind in new WalletManager().GetAllWalletInStore())
+                {
+                    addressBalances = await new AddressManager().GetWalletBalance(MyWallet);
+                }
 
+                await _UpdateMoney();
+
+                DateTime _End = DateTime.Now;
+                lbl_status.Text = "-";
+                Btn_getBalance.Enabled = true;
+                Btn_Send.Enabled = true;
+
+
+            }
+            catch { }
         }
     }
 }

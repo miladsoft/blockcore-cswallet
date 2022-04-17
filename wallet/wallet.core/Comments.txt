@@ -159,8 +159,8 @@
   "accountName": "account 0", 
   "recipients": [
     {
-      "destinationAddress": "sbc1qtppzhz32watt6255aq0zld7e4jpcl6yn2m7em8",
-      "amount": "9.999"
+      "destinationAddress": "sbc1qj04a665g70tfcmrejrvmfrugrnyc3c8rfugdlr",
+      "amount": "5"
     }
   ],
   "opReturnData": "",

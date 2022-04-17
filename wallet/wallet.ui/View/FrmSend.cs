@@ -1,4 +1,6 @@
-﻿using System;
+﻿
+using NBitcoin.Policy;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -27,6 +29,8 @@ namespace wallet.ui.View
             }
             catch { }
         }
+        public List<AddressBalance> addressBalances { get; set; }
+
         BlockTransection _BlockTransection = new BlockTransection();
 
         private async void Btn_CreateTransaction_Click(object sender, EventArgs e)
@@ -40,16 +44,28 @@ namespace wallet.ui.View
 
             try
             {
-                MyWallet.UnspentOutputReferences = await _BlockTransection.GetSpendableTransactions(MyWallet);
-                String _Hex = _BlockTransection.GetTransectionHex(Txt_Destination.Text, int.Parse(Txt_Amount.Text), Txt_Password.Text, MyWallet);
-                if(_Hex != "")
+                MyWallet.UnspentOutputReferences = await _BlockTransection.GetSpendableTransactions(MyWallet, addressBalances);
+
+                TransactionPolicyError[] errors = null;
+
+                // String _Hex = new SendCoin().SendCoins(Txt_Password.Text, Txt_Amount.Text, _ChangedAddress, Txt_Destination.Text, MyWallet, out errors);
+                String _Hex = "";
+                //   new SendCoin().SendCoins1(Txt_Password.Text, _ChangedAddress, Txt_Destination.Text, MyWallet);
+
+                  _BlockTransection.GetTransectionHex(Txt_Destination.Text, "sbc1qzv5apv05f05k0yw8tv423455q6kl8uk38gg2ls", Txt_Amount.Text, Txt_Password.Text, MyWallet, out errors);
+                if (_Hex != "")
                 {
                     TxtLog.Text += Environment.NewLine + "Hex is ";
                     TxtLog.Text += _Hex;
                 }
                 else
                 {
-                    TxtLog.Text += "Failed To Create Hex";                    
+                    TxtLog.Text += "Failed To Create Hex" + Environment.NewLine;
+                    TxtLog.Text += "------ Error ---------- " + Environment.NewLine;
+                    foreach (var error in errors)
+                    {
+                        TxtLog.Text += error + Environment.NewLine;
+                    }
                 }
 
             }

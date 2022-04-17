@@ -19,7 +19,7 @@ namespace wallet.core
 
 
 
-        public async Task GetWalletBalance(WalletFile _WalletFile)
+        public async Task<List<AddressBalance>> GetWalletBalance(WalletFile _WalletFile)
         {
             addressBalances = new List<AddressBalance>();
             try
@@ -61,7 +61,7 @@ namespace wallet.core
                  
             }
             catch { }
-            
+            return addressBalances;
         }
 
         public async Task<AddressBalance> GetAddressBalance(String SgwitAddress)

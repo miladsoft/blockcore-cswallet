@@ -58,14 +58,24 @@ namespace wallet.core
         public string posBlockTrust { get; set; }
         public string posChainTrust { get; set; }
     }
+ 
+
+
+    public class Outpoint
+    {
+        public string transactionId { get; set; }
+        public int outputIndex { get; set; }
+    }
 
     public class AdressTrx
     {
-        public string entryType { get; set; }
-        public string transactionHash { get; set; }
-        public int value { get; set; }
+        public Outpoint outpoint { get; set; }
+        public string address { get; set; }
+        public string scriptHex { get; set; }
+        public Double value { get; set; }
         public int blockIndex { get; set; }
-        public int confirmations { get; set; }
+        public bool coinBase { get; set; }
+        public bool coinStake { get; set; }
     }
 
 }

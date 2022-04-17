@@ -13,7 +13,13 @@ namespace wallet.ui
             InitializeComponent();
         }
 
+        private async void bnn_CreateWallet_Click(object sender, EventArgs e)
+        {
+            FrmCreateWallet frm = new FrmCreateWallet();
+            frm.ShowDialog();
+            await _LoadAllWallets();
 
+        }
 
         private void btn_RecoverWallet_Click(object sender, EventArgs e)
         {
@@ -77,6 +83,7 @@ namespace wallet.ui
 
         private async void Timer_ReloadBalance_Tick(object sender, EventArgs e)
         {
+            return;
             Timer_ReloadBalance.Enabled = false;
             Timer_ReloadBalance.Interval = (int)TimeSpan.FromMinutes(10).TotalMilliseconds;
 
@@ -87,18 +94,6 @@ namespace wallet.ui
 
             processWalletMoney.StartUpdate();
 
-        }
-
-        private async void bnn_CreateWallet_Click(object sender, EventArgs e)
-        {
-            FrmCreateWallet frm = new FrmCreateWallet();
-            frm.ShowDialog();
-            await _LoadAllWallets();
-        }
-
-        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
         }
     }
 }

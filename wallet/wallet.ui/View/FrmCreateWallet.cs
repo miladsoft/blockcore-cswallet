@@ -45,7 +45,7 @@ namespace wallet.ui
             }
             else
             {
-                errorProviderCW.SetError(Btn_SelectedNetwork, "Please Selected Network");
+                errorProviderCW.SetError(Btn_SelectNetwork, "Please Selected Network");
                 return;
             }
 
