@@ -102,9 +102,7 @@ namespace wallet.ui.Elements
                 DateTime _End = DateTime.Now;
                 lbl_status.Text = "-";
                 Btn_getBalance.Enabled = true;
-                Btn_Send.Enabled = true;
-
-
+                 
             }
             catch { }
         }

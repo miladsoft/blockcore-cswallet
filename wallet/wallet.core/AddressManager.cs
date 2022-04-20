@@ -79,6 +79,7 @@ namespace wallet.core
                     response.EnsureSuccessStatusCode();
                     var body = await response.Content.ReadAsStringAsync();
                     AddressBalance myDeserializedClass = JsonConvert.DeserializeObject<AddressBalance>(body.ToString());
+                 
                     return myDeserializedClass;
                     //myDeserializedClass.balance * 0.00000001;
                 }
