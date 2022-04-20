@@ -1,5 +1,4 @@
-﻿
-using NBitcoin.Policy;
+﻿using NBitcoin.Policy;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -46,13 +45,15 @@ namespace wallet.ui.View
             {
                 MyWallet.UnspentOutputReferences = await _BlockTransection.GetSpendableTransactions(MyWallet, addressBalances);
 
+                var _ChangedAddress = MyWallet.hdAccount.InternalAddresses.FirstOrDefault();
+
                 TransactionPolicyError[] errors = null;
 
                 // String _Hex = new SendCoin().SendCoins(Txt_Password.Text, Txt_Amount.Text, _ChangedAddress, Txt_Destination.Text, MyWallet, out errors);
-                String _Hex = "";
-                //   new SendCoin().SendCoins1(Txt_Password.Text, _ChangedAddress, Txt_Destination.Text, MyWallet);
+              String _Hex = "";
+                 new SendCoin().SendCoins1(Txt_Password.Text, _ChangedAddress, Txt_Destination.Text, MyWallet);
 
-                  _BlockTransection.GetTransectionHex(Txt_Destination.Text, "sbc1qzv5apv05f05k0yw8tv423455q6kl8uk38gg2ls", Txt_Amount.Text, Txt_Password.Text, MyWallet, out errors);
+             _BlockTransection.GetTransectionHex(Txt_Destination.Text, _ChangedAddress,  int.Parse(Txt_Amount.Text), Txt_Password.Text, MyWallet, out errors);
                 if (_Hex != "")
                 {
                     TxtLog.Text += Environment.NewLine + "Hex is ";

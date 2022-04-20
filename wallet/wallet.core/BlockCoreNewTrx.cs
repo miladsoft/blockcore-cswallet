@@ -30,72 +30,76 @@ namespace wallet.core
 
                 foreach (var _Adr in addressBalances.Where(li => li.balance > 0))
                 {
-                    try
+                    if (_Adr.balance * 0.00000001 > 0.1)
                     {
-
-                        HdAddress hdAddress;
                         try
                         {
-                            hdAddress = MyWallet.hdAccount.InternalAddresses.First(li => li.Bech32Address == _Adr.address);
-                        }
-                        catch { hdAddress = MyWallet.hdAccount.ExternalAddresses.First(li => li.Bech32Address == _Adr.address); }
 
-
-                        var _Trxs = await GetAddressTransectionT(_Adr.address, new BlockCoreNetworks().GetNetwork(MyWallet.Network));
-                        if (_Trxs != null)
-                        {
-                            int countFrom = currentChainHeight + 1;
-
-                            foreach (TransactionOutputData transactionData in await UnspentTransactions(hdAddress, network, _Trxs))
+                            HdAddress hdAddress;
+                            try
                             {
-                                int? confirmationCount = 0;
+                                hdAddress = MyWallet.hdAccount.InternalAddresses.First(li => li.Bech32Address == _Adr.address);
+                            }
+                            catch { hdAddress = MyWallet.hdAccount.ExternalAddresses.First(li => li.Bech32Address == _Adr.address); }
 
-                                if (transactionData.BlockHeight != null)
+
+                            var _Trxs = await GetAddressTransectionT(_Adr.address, new BlockCoreNetworks().GetNetwork(MyWallet.Network));
+                            if (_Trxs != null)
+                            {
+                                int countFrom = currentChainHeight + 1;
+
+                                foreach (TransactionOutputData transactionData in await UnspentTransactions(hdAddress, network, _Trxs))
                                 {
-                                    confirmationCount = countFrom >= transactionData.BlockHeight ? countFrom - transactionData.BlockHeight : 0;
-                                }
+                                    int? confirmationCount = 0;
 
-                                if (confirmationCount < confirmations)
-                                {
-                                    continue;
-                                }
-
-                                bool isCoinBase = transactionData.IsCoinBase ?? false;
-                                bool isCoinStake = transactionData.IsCoinStake ?? false;
-
-                                // Check if this wallet is a normal purpose wallet (not cold staking, etc).
-                                //if (this.IsNormalAccount())
-                                //{
-                                //    bool isColdCoinStake = transactionData.IsColdCoinStake ?? false;
-
-                                //    // Skip listing the UTXO if this is a normal wallet, and the UTXO is marked as an cold coin stake.
-                                //    if (isColdCoinStake)
-                                //    {
-                                //        continue;
-                                //    }
-                                //}
-
-
-                                // This output can unconditionally be included in the results.
-                                // Or this output is a ColdStake, CoinBase or CoinStake and has reached maturity.
-                                if ((!isCoinBase && !isCoinStake) || (confirmationCount > coinbaseMaturity))
-                                {
-                                    UnspentOutputReferences.Add(new UnspentOutputReference
+                                    if (transactionData.BlockHeight != null)
                                     {
-                                        Account = MyWallet.hdAccount,
-                                        Address = hdAddress,
-                                        Transaction = transactionData,
-                                        Confirmations = confirmationCount.Value,
+                                        confirmationCount = countFrom >= transactionData.BlockHeight ? countFrom - transactionData.BlockHeight : 0;
+                                    }
 
-                                    });
+                                    if (confirmationCount < confirmations)
+                                    {
+                                        continue;
+                                    }
+
+                                    bool isCoinBase = transactionData.IsCoinBase ?? false;
+                                    bool isCoinStake = transactionData.IsCoinStake ?? false;
+
+                                    // Check if this wallet is a normal purpose wallet (not cold staking, etc).
+                                    //if (this.IsNormalAccount())
+                                    //{
+                                    //    bool isColdCoinStake = transactionData.IsColdCoinStake ?? false;
+
+                                    //    // Skip listing the UTXO if this is a normal wallet, and the UTXO is marked as an cold coin stake.
+                                    //    if (isColdCoinStake)
+                                    //    {
+                                    //        continue;
+                                    //    }
+                                    //}
+
+
+                                    // This output can unconditionally be included in the results.
+                                    // Or this output is a ColdStake, CoinBase or CoinStake and has reached maturity.
+                                    if ((!isCoinBase && !isCoinStake) || (confirmationCount > coinbaseMaturity))
+                                    {
+                                        UnspentOutputReferences.Add(new UnspentOutputReference
+                                        {
+                                            Account = MyWallet.hdAccount,
+                                            Address = hdAddress,
+                                            Transaction = transactionData,
+                                            Confirmations = confirmationCount.Value,
+
+
+                                        });
+                                    }
                                 }
+
+
                             }
 
-
                         }
-
+                        catch { }
                     }
-                    catch { }
                 }
 
 
@@ -120,7 +124,7 @@ namespace wallet.core
                         AddressBalance addressBalance = await new AddressManager().GetAddressBalance(_Adr.Bech32Address);
                         if (addressBalance != null)
                         {
-                            if (addressBalance.balance > 0)
+                            if (addressBalance.balance > 1)
                             {
                                 var _Trxs = await GetAddressTransectionT(_Adr.Bech32Address, new BlockCoreNetworks().GetNetwork(MyWallet.Network));
                                 if (_Trxs != null)
@@ -187,7 +191,7 @@ namespace wallet.core
                         AddressBalance addressBalance = await new AddressManager().GetAddressBalance(_Adr.Bech32Address);
                         if (addressBalance != null)
                         {
-                            if (addressBalance.balance > 0)
+                            if (addressBalance.balance > 1)
                             {
                                 var _Trxs = await GetAddressTransectionT(_Adr.Bech32Address, new BlockCoreNetworks().GetNetwork(MyWallet.Network));
                                 if (_Trxs != null)
@@ -273,7 +277,7 @@ namespace wallet.core
                         Transaction.BlockHeight = li.blockIndex;
                         Transaction.Id = new uint256(li.outpoint.transactionId);
                         Transaction.Index = li.outpoint.outputIndex;
-                        Transaction.OutPoint = new OutPoint(new uint256(li.outpoint.transactionId), li.outpoint.outputIndex);
+                         Transaction.OutPoint = new OutPoint(new uint256(li.outpoint.transactionId), li.outpoint.outputIndex);
                         Transaction.Hex = null;
                         var _bf = await GetBlockinfo(li, network);
                         if (_bf != null)
@@ -340,25 +344,17 @@ namespace wallet.core
         }
 
 
-        public string GetTransectionHex(String _Destantion, String _ChangEAddress, String Amount, String _Password, WalletFile MyWallet, out TransactionPolicyError[] errors)
+        public string GetTransectionHex(String _Destantion, HdAddress _ChangeAddress, int Amount, String _Password, WalletFile MyWallet, out TransactionPolicyError[] errors)
         {
-
-
-            HdAddress _ChangeAddress;
-            try
-            {
-                _ChangeAddress = MyWallet.hdAccount.InternalAddresses.First(li => li.Bech32Address == _ChangEAddress);
-            }
-            catch { _ChangeAddress = MyWallet.hdAccount.ExternalAddresses.First(li => li.Bech32Address == _ChangEAddress); }
-
+            errors = new TransactionPolicyError[2];
 
             try
             {
                 Network network = new BlockCoreNetworks().GetNetwork(MyWallet.Network);
-
+                Key WalletKey;
                 try
                 {
-                    NBitcoin.Key.Parse(MyWallet.EncryptedSeed, _Password, network);
+                    WalletKey = NBitcoin.Key.Parse(MyWallet.EncryptedSeed, _Password, network);
                 }
                 catch (Exception ex)
                 {
@@ -370,17 +366,7 @@ namespace wallet.core
 
 
 
-                List<Coin> coinList = new List<Coin>();
-                foreach (var _coins in MyWallet.UnspentOutputReferences)
-                {
-                    var newcoin = new Coin(fromTxHash: new uint256(_coins.Transaction.Id),
-                      fromOutputIndex: (uint)_coins.Transaction.BlockHeight,
-                      amount: Money.Parse(_coins.Transaction.Amount.ToString()),
-                      scriptPubKey: _coins.Transaction.ScriptPubKey
-                      );
-                    coinList.Add(newcoin);
-                }
-
+              
 
                 List<OutPoint> outPoints = new List<OutPoint>();
                 foreach (var _coins in MyWallet.UnspentOutputReferences)
@@ -395,10 +381,10 @@ namespace wallet.core
                 recipients.Add(new Recipient
                 {
                     ScriptPubKey = BitcoinAddress.Create(_Destantion, network).ScriptPubKey,
-                    Amount = Money.Parse(Amount)
+                    Amount = Money.Parse("5")
                 });
 
-               TransactionBuilder txBuilder = new TransactionBuilder(network);
+                TransactionBuilder txBuilder = new TransactionBuilder(network);
                 var context = new TransactionBuildContext(network)
                 {
                     AccountReference = new WalletAccountReference(MyWallet.Name, "account 0"),
@@ -408,23 +394,59 @@ namespace wallet.core
                     Recipients = recipients,
                     UseSegwitChangeAddress = recipients[0].ScriptPubKey.IsScriptType(ScriptType.Witness),
                     TransactionFee = Money.Parse("0.0001"),
-                    SelectedInputs = outPoints,
+                   // SelectedInputs = outPoints,
                     ChangeAddress = _ChangeAddress,
-                    FeeType = FeeType.Medium,
+                    FeeType = FeeType.Low,
                     AllowOtherInputs = false,
                     OpReturnData = "",
                     OpReturnRawData = new byte[0],
-                    // UnspentOutputs = MyWallet.UnspentOutputReferences,
+                     //UnspentOutputs = MyWallet.UnspentOutputReferences,
                 };
 
 
+                var coinslist = new List<Coin>();
+                foreach (UnspentOutputReference item in MyWallet.UnspentOutputReferences
+                  .OrderByDescending(a => a.Confirmations > 0)
+                  .ThenByDescending(a => a.Transaction.Amount))
+                {
 
-              //  context.TransactionBuilder.AddCoins(coinList);
-            //    context.TransactionBuilder.SendFees(Money.Parse("0.0001"));
+
+                    coinslist.Add(new Coin(item.Transaction.Id, (uint)item.Transaction.Index, item.Transaction.Amount, item.Transaction.ScriptPubKey));
+
+                }
+
+                context.TransactionBuilder.SetChange(_ChangeAddress.ScriptPubKey);
+                context.TransactionBuilder.AddCoins(coinslist);
 
 
-                Transaction tx = context.TransactionBuilder.BuildTransaction(false);
+                var signingKeys = new HashSet<ISecret>();
+                var added = new HashSet<HdAddress>();
+                foreach (Coin coinSpent in coinslist)
+                {
+                    //obtain the address relative to this coin (must be improved)
+                    HdAddress address = MyWallet.UnspentOutputReferences.First(output => output.ToOutPoint() == coinSpent.Outpoint).Address;
+
+                    if (added.Contains(address))
+                        continue;
+
+
+                    ExtKey seedExtKey = new ExtKey(WalletKey, Convert.FromBase64String( MyWallet.ChainCode));
+
+                    //Encoders.Hex.DecodeData(li.scriptHex)
+
+                    ExtKey addressExtKey = seedExtKey.Derive(new KeyPath(address.HdPath));
+                    BitcoinExtKey addressPrivateKey = addressExtKey.GetWif(network);
+                    signingKeys.Add(addressPrivateKey);
+                    added.Add(address);
+                }
+
                 
+
+               context.SelectedInputs.AddRange(outPoints);
+                context.TransactionBuilder.AddKeys(signingKeys.ToArray());
+                context.TransactionBuilder.SendFees(Money.Parse("0.0001"));
+                Transaction tx = context.TransactionBuilder.BuildTransaction(false);
+           
                 var resTransaction = txBuilder.Verify(tx, out errors); //check fully signed
 
                 if (resTransaction)
@@ -435,13 +457,10 @@ namespace wallet.core
 
                 }
             }
-            catch (Exception _ex) {
-                errors = new TransactionPolicyError[2];
-                errors[0] = new TransactionPolicyError(_ex.Message);
-            }
+            catch (Exception _ex) { }
 
+          
             
-
 
             return "";
 
@@ -450,7 +469,11 @@ namespace wallet.core
 
 
 
-
+        public static string Base64Decode(string base64EncodedData)
+        {
+            var base64EncodedBytes = System.Convert.FromBase64String(base64EncodedData);
+            return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
+        }
 
 
 

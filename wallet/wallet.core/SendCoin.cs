@@ -39,18 +39,17 @@ namespace wallet.core
             var ownAddress = BitcoinAddress.Create(_ChangedAdress.Bech32Address, network);
             var foreignAddress = BitcoinAddress.Create(DistanationAddress, network);
 
-           
-            List<Coin> coinList = new List<Coin>();
-            foreach (var _coins in MyWallet.UnspentOutputReferences)
-            {
-                var newcoin = new Coin(fromTxHash: new uint256(_coins.Transaction.Id),
-                  fromOutputIndex: (uint)_coins.Transaction.BlockHeight,
-                  amount: Money.Parse(_coins.Transaction.Amount.ToString()),
-                  scriptPubKey: _coins.Transaction.ScriptPubKey
-                  );
-                coinList.Add(newcoin);
-            }
 
+            var coinslist = new List<Coin>();
+            foreach (UnspentOutputReference item in MyWallet.UnspentOutputReferences
+              .OrderByDescending(a => a.Confirmations > 0)
+              .ThenByDescending(a => a.Transaction.Amount))
+            {
+
+
+                coinslist.Add(new Coin(item.Transaction.Id, (uint)item.Transaction.Index, item.Transaction.Amount, item.Transaction.ScriptPubKey));
+
+            }
             // utxo
             //https://sbc.indexer.blockcore.net/api/query/address/sbc1q0n7v63javqagyr3gkuz2gqeevv3ver4hrq0s9c/transactions?offset=0&limit=10
 
@@ -97,7 +96,7 @@ namespace wallet.core
             
 
             var tx = txBuilder
-                .AddCoins(coinList)
+                .AddCoins(coinslist)
                 .AddKeys(_myKey)
                 .Send(foreignAddress, fundsToSpend)
                 .SendFees(feeForMiner)
@@ -157,37 +156,39 @@ namespace wallet.core
 
 
 
-            List<Coin> coinList = new List<Coin>();
-            foreach (var _coins in MyWallet.UnspentOutputReferences)
-            {
-                var newcoin = new Coin(fromTxHash: new uint256(_coins.Transaction.Id),
-                  fromOutputIndex: (uint)_coins.Transaction.BlockHeight,
-                  amount: Money.Parse(_coins.Transaction.Amount.ToString()),
-                  scriptPubKey: _coins.Transaction.ScriptPubKey
-                  );
-              
 
-                coinList.Add(newcoin);
+            
+
+            var coinslist = new List<Coin>();
+            foreach (UnspentOutputReference item in MyWallet.UnspentOutputReferences
+              .OrderByDescending(a => a.Confirmations > 0)
+              .ThenByDescending(a => a.Transaction.Amount))
+            {
+                
+
+                coinslist.Add(new Coin(item.Transaction.Id, (uint)item.Transaction.Index, item.Transaction.Amount, item.Transaction.ScriptPubKey));
+             
             }
 
 
-
-
-
-
+            List<OutPoint> outPoints = new List<OutPoint>();
+            foreach (var _coins in MyWallet.UnspentOutputReferences)
+            {
+                OutPoint outpoint = new OutPoint(_coins.Transaction.Id, _coins.Transaction.Index);
+                outPoints.Add(outpoint);
+            }
 
 
             var txBuilder = new TransactionBuilder(network);
-
             var tx = txBuilder
-                .AddCoins(coinList)
-                .AddKeys(key)
-                .Send(foreignAddress, fundsToSpend)
+                .AddCoins(coinslist)
+                .AddKeys(key)              
+                .Send(foreignAddress.ScriptPubKey, fundsToSpend)
                 .SendFees(feeForMiner)
                 .SetChange(ownAddress.ScriptPubKey)
                 .BuildTransaction(sign: true);
+            // tx.AddInput(new TxIn(outPoints.FirstOrDefault()));
 
-            
 
 
             TransactionPolicyError[] errors = null;

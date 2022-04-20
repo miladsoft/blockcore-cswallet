@@ -236,6 +236,7 @@ namespace wallet.core
         }
 
 
+    
         public Boolean CreateNewWallet(NewWalletRequst _NewWalletRequst)
         {
             if (Directory.Exists(WalletDirectory) == false)
