@@ -31,6 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WalletItem));
             this.panel1 = new System.Windows.Forms.Panel();
             this.Btn_getBalance = new System.Windows.Forms.Button();
+            this.Btn_ShowAddress = new System.Windows.Forms.Button();
             this.Btn_Send = new System.Windows.Forms.Button();
             this.lbl_UnConfirmed = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -50,6 +51,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel1.Controls.Add(this.Btn_getBalance);
+            this.panel1.Controls.Add(this.Btn_ShowAddress);
             this.panel1.Controls.Add(this.Btn_Send);
             this.panel1.Controls.Add(this.lbl_UnConfirmed);
             this.panel1.Controls.Add(this.label2);
@@ -68,7 +70,7 @@
             // 
             this.Btn_getBalance.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.Btn_getBalance.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.Btn_getBalance.Location = new System.Drawing.Point(437, 59);
+            this.Btn_getBalance.Location = new System.Drawing.Point(350, 59);
             this.Btn_getBalance.Name = "Btn_getBalance";
             this.Btn_getBalance.Size = new System.Drawing.Size(84, 29);
             this.Btn_getBalance.TabIndex = 3;
@@ -76,11 +78,25 @@
             this.Btn_getBalance.UseVisualStyleBackColor = true;
             this.Btn_getBalance.Click += new System.EventHandler(this.Btn_getBalance_ClickAsync);
             // 
+            // Btn_ShowAddress
+            // 
+            this.Btn_ShowAddress.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.Btn_ShowAddress.Enabled = false;
+            this.Btn_ShowAddress.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.Btn_ShowAddress.Location = new System.Drawing.Point(520, 59);
+            this.Btn_ShowAddress.Name = "Btn_ShowAddress";
+            this.Btn_ShowAddress.Size = new System.Drawing.Size(84, 29);
+            this.Btn_ShowAddress.TabIndex = 3;
+            this.Btn_ShowAddress.Text = "Address";
+            this.Btn_ShowAddress.UseVisualStyleBackColor = true;
+            this.Btn_ShowAddress.Click += new System.EventHandler(this.Btn_ShowAddress_Click);
+            // 
             // Btn_Send
             // 
             this.Btn_Send.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.Btn_Send.Enabled = false;
             this.Btn_Send.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.Btn_Send.Location = new System.Drawing.Point(521, 59);
+            this.Btn_Send.Location = new System.Drawing.Point(434, 59);
             this.Btn_Send.Name = "Btn_Send";
             this.Btn_Send.Size = new System.Drawing.Size(84, 29);
             this.Btn_Send.TabIndex = 3;
@@ -195,5 +211,6 @@
         private Button Btn_Send;
         private Button Btn_getBalance;
         private Label lbl_status;
+        private Button Btn_ShowAddress;
     }
 }
