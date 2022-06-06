@@ -53,11 +53,6 @@ namespace wallet.ui.View
                 TransactionPolicyError[] errors = null;
                 String _Hex = "";
 
-                // _Hex = new SendCoin().SendCoins(Txt_Password.Text, Txt_Amount.Text, _ChangedAddress, Txt_Destination.Text, MyWallet, out errors);
-
-                //    _Hex = new SendCoin().SendCoins1(Txt_Password.Text, _ChangedAddress, Txt_Destination.Text, MyWallet);
-
-                // _Hex = _BlockTransection.GetTransectionHex(Txt_Destination.Text, _ChangedAddress,  int.Parse(Txt_Amount.Text), Txt_Password.Text, MyWallet, out errors);
                 _Hex = new SendCoin().TXSendCoins(Txt_Password.Text, Txt_Amount.Text, _ChangedAddress, Txt_Destination.Text, MyWallet);
 
 

@@ -77,8 +77,7 @@ namespace wallet.ui
 
             _WalletObject.NetworkName = "SeniorBlockCoinMain";
 
-          //  _WalletManager.RecoverWallet(_WalletObject);
- 
+
         }
     }
 }

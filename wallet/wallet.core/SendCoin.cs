@@ -51,45 +51,6 @@ namespace wallet.core
                 coinslist.Add(new Coin(item.Transaction.Id, (uint)item.Transaction.Index, item.Transaction.Amount, _myKey.ScriptPubKey));
 
             }
-            // utxo
-            //https://sbc.indexer.blockcore.net/api/query/address/sbc1q0n7v63javqagyr3gkuz2gqeevv3ver4hrq0s9c/transactions?offset=0&limit=10
-
-            //var coin = new Coin(fromTxHash: new uint256("54d138222810c3672d93cadc7aaace73111017ff978202ab1e4beb00fe29e46b"),
-            //    fromOutputIndex: 127518,
-            //    amount: Money.Parse("8.99990000"),
-            //    scriptPubKey: _WalletObject.PrivateKey.ScriptPubKey
-            //    );
-
-
-
-            //OutPoint outPoint = new OutPoint(uint256.Parse("54d138222810c3672d93cadc7aaace73111017ff978202ab1e4beb00fe29e46b"), 0);
-            //TxIn _TxIn = new TxIn(outPoint);
-            //TxOut _TxOut = new TxOut(Money.Parse("8.99990000"), ownAddress);
-
-
-
-            //Transaction transaction1 = new Transaction();
-            //transaction1.AddInput(_TxIn);
-            //transaction1.AddOutput(_TxOut);
-
-            //Transaction aliceFunding = new Transaction()
-            //{
-            //    Inputs =
-            //    {
-            //        new TxIn (outPoint)
-            //    }
-            //    ,
-
-            //    Outputs =
-            //{
-            //    new TxOut(Money.Parse("8.99990000"), ownAddress)
-            //}
-
-            //};
-            //Coin[] MainAddressCoins = aliceFunding
-            //                        .Outputs
-            //                        .Select((o, i) => new Coin(new OutPoint(aliceFunding.GetHash(), i), o))
-            //                        .ToArray();
 
             var signingKeys = new HashSet<ISecret>();
             var added = new HashSet<HdAddress>();
@@ -122,14 +83,6 @@ namespace wallet.core
                 .SendFees(feeForMiner)
                 .SetChange(_myKey.ScriptPubKey)                 
                 .BuildTransaction(sign: false);
-
-
-            //tx.Outputs.Add(new TxOut(Money.Coins(sum), myScriptPubKey));
-
-            //Coin[] coins = transaction.Outputs.AsCoins().ToArray();
-
-
-
 
             var resTransaction = txBuilder.Verify(tx, out errors); //check fully signed
 
@@ -172,30 +125,12 @@ namespace wallet.core
             var ownAddress = BitcoinAddress.Create(_ChangedAdress.Address, network);
             var foreignAddress = BitcoinAddress.Create(DistanationAddress, network);
 
-
-            // utxo
-            //https://sbc.indexer.blockcore.net/api/query/address/sbc1q0n7v63javqagyr3gkuz2gqeevv3ver4hrq0s9c/transactions?offset=0&limit=10
-
-            //var coin = new Coin(fromTxHash: new uint256("54d138222810c3672d93cadc7aaace73111017ff978202ab1e4beb00fe29e46b"),
-            //    fromOutputIndex: 127518,
-            //    amount: Money.Parse("8.99990000"),
-            //    scriptPubKey: _WalletObject.PrivateKey.ScriptPubKey
-            //    );
-
-
-
-
-            
-
             var coinslist = new List<Coin>();
             foreach (UnspentOutputReference item in MyWallet.UnspentOutputReferences
               .OrderByDescending(a => a.Confirmations > 0)
               .ThenByDescending(a => a.Transaction.Amount))
             {
-                
-
-                coinslist.Add(new Coin(item.Transaction.Id, (uint)item.Transaction.Index, item.Transaction.Amount, item.Transaction.ScriptPubKey));
-             
+                coinslist.Add(new Coin(item.Transaction.Id, (uint)item.Transaction.Index, item.Transaction.Amount, item.Transaction.ScriptPubKey));      
             }
 
 
@@ -217,9 +152,6 @@ namespace wallet.core
                 .SetChange(ownAddress.ScriptPubKey)
                 .Shuffle()
                 .BuildTransaction(sign: true);
-            //tx.AddInput(new TxIn(outPoints.FirstOrDefault()));
-
-
 
             TransactionPolicyError[] errors = null;
             var resTransaction = txBuilder.Verify(tx, out errors); //check fully signed
@@ -273,29 +205,12 @@ namespace wallet.core
                 ExtKey extKey = new ExtKey(_myKey, Convert.FromBase64String(MyWallet.ChainCode));
                 var signingKeys = new HashSet<ISecret>();
                 var added = new HashSet<HdAddress>();
-
                 var coinsToSpend = new HashSet<Coin>();
                 bool haveEnough = SelectCoins(ref coinsToSpend, amountToSend + 1, MyWallet.UnspentOutputReferences);
-
-
-
                 List<HdAddress> alladress = new List<HdAddress>();
                 alladress.AddRange(MyWallet.hdAccount.InternalAddresses);
                 alladress.AddRange(MyWallet.hdAccount.ExternalAddresses);
 
-                //foreach (var coin in coinsToSpend)
-                //{
-                //    foreach (var elem in alladress)
-                //    {
-                //        if (elem.ScriptPubKey == coin.ScriptPubKey)
-                //        {
-                //            BitcoinExtKey addressPrivateKey = extKey.GetWif(network);
-                //            signingKeys.Add(addressPrivateKey);
-                //        }
-                //    }
-                //}
-                             
-  
                 try
                 {
                     foreach (Coin coinSpent in coinsToSpend)
@@ -304,17 +219,11 @@ namespace wallet.core
                         if (added.Contains(address))
                             continue;
 
-
-
                         ExtKey addressExtKey = extKey.Derive(new KeyPath(address.HdPath));
                         BitcoinExtKey addressPrivateKey = addressExtKey.GetWif(network);
                         signingKeys.Add(addressPrivateKey);
                         added.Add(address);
 
-
-                        //BitcoinExtKey addressPrivateKey = extKey.GetWif(network);
-                        //signingKeys.Add(addressPrivateKey);
-                        //added.Add(address);
                     }
 
                 }
@@ -322,15 +231,10 @@ namespace wallet.core
 
                 Script _IDes = new BitcoinWitPubKeyAddress(_ChangedAdress.Bech32Address, network).ScriptPubKey;
 
-                if (addressToSend.ScriptPubKey.IsScriptType(ScriptType.Witness) == true)
+                if (addressToSend.ScriptPubKey.IsScriptType(ScriptType.Witness) != true)
                 {
-                   
+                   _IDes = _ChangedAdress.ScriptPubKey;
                 }
-                else
-                {
-                    _IDes = _ChangedAdress.ScriptPubKey;
-                }
-
 
                 var builder = new TransactionBuilder(network);
                 var tx = builder
@@ -354,11 +258,6 @@ namespace wallet.core
                     return transactionHex;
 
                 }
-
-
-            
-
-
 
             }
             catch { }
