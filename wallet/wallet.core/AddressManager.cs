@@ -72,56 +72,6 @@ namespace wallet.core
             try
             {
 
-                if(SgwitAddress == "sbc1qqvghruuhasdg2nfgzslvaccunj9m8f2nsp5vmm")
-                {
-
-                }
-
-                if (SgwitAddress == "sbc1qelhmpvv2krg3euapk88cfarn2kmjygxnt8jjy5")
-                {
-
-                }
-                if (SgwitAddress == "sbc1qknsjhqeyt7m9dvxxrtfq4p300tf3p32tq8m8ky")
-                {
-
-                }
-
-                if (SgwitAddress == "sbc1q3k54excyyq3a4t2tvz4q7hgset43wnwst6ypnn")
-                {
-
-                }
-
-                if (SgwitAddress == "sbc1qdnmepfylnhrh6w9rux47qus824a8n9tch7egzz")
-                {
-
-                }
-
-                if (SgwitAddress == "sbc1q6fjdc87sttrden9hk204dvj23g29lfj06vmxup")
-                {
-
-                }
-
-
-                if (SgwitAddress == "sbc1q0n7v63javqagyr3gkuz2gqeevv3ver4hrq0s9c")
-                {
-
-                }
-                if (SgwitAddress == "sbc1qzv5apv05f05k0yw8tv423455q6kl8uk38gg2ls")
-                {
-
-                }
-
-                if (SgwitAddress == "sbc1qc5qxfgu29gn49cuxm5wdpvp8nm3fmewuf2lvft")
-                {
-
-                }
-
-
-
-
-                //  http://localhost:15000/
-
-
                 var client = new HttpClient();
                 var request = new HttpRequestMessage
                 {

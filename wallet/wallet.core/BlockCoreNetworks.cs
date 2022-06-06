@@ -30,7 +30,7 @@ namespace wallet.core
 
 
         public int CoinType(Network network)
-        {            
+        {
             if (network.CoinTicker == "SBC")
             { return 5006; }
 
