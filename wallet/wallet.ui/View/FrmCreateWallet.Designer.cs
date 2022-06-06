@@ -67,95 +67,91 @@
             this.groupBox1.Controls.Add(this.btn_GenerateMnemonic);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.txt_Mnemonic);
-            this.groupBox1.Location = new System.Drawing.Point(14, 16);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox1.Size = new System.Drawing.Size(669, 305);
+            this.groupBox1.Size = new System.Drawing.Size(585, 229);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             // 
             // lbl_SelectedCoin
             // 
             this.lbl_SelectedCoin.AutoSize = true;
-            this.lbl_SelectedCoin.Location = new System.Drawing.Point(356, 259);
+            this.lbl_SelectedCoin.Location = new System.Drawing.Point(312, 194);
             this.lbl_SelectedCoin.Name = "lbl_SelectedCoin";
-            this.lbl_SelectedCoin.Size = new System.Drawing.Size(90, 20);
+            this.lbl_SelectedCoin.Size = new System.Drawing.Size(71, 15);
             this.lbl_SelectedCoin.TabIndex = 10;
             this.lbl_SelectedCoin.Text = "not selected";
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(318, 250);
+            this.pictureBox1.Location = new System.Drawing.Point(274, 187);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(32, 32);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 9;
             this.pictureBox1.TabStop = false;
             // 
             // txt_Password
             // 
             this.txt_Password.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txt_Password.Location = new System.Drawing.Point(119, 215);
-            this.txt_Password.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.txt_Password.Location = new System.Drawing.Point(104, 161);
             this.txt_Password.Name = "txt_Password";
-            this.txt_Password.Size = new System.Drawing.Size(400, 27);
+            this.txt_Password.Size = new System.Drawing.Size(350, 23);
             this.txt_Password.TabIndex = 8;
             this.txt_Password.Text = "P@@sword!!200";
             // 
             // txt_Name
             // 
             this.txt_Name.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txt_Name.Location = new System.Drawing.Point(119, 176);
-            this.txt_Name.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.txt_Name.Location = new System.Drawing.Point(104, 132);
             this.txt_Name.Name = "txt_Name";
-            this.txt_Name.Size = new System.Drawing.Size(400, 27);
+            this.txt_Name.Size = new System.Drawing.Size(350, 23);
             this.txt_Name.TabIndex = 7;
             this.txt_Name.Text = "WalletSBC";
             // 
             // txt_Passphrase
             // 
             this.txt_Passphrase.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txt_Passphrase.Location = new System.Drawing.Point(119, 137);
-            this.txt_Passphrase.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.txt_Passphrase.Location = new System.Drawing.Point(104, 103);
             this.txt_Passphrase.Name = "txt_Passphrase";
-            this.txt_Passphrase.Size = new System.Drawing.Size(400, 27);
+            this.txt_Passphrase.Size = new System.Drawing.Size(350, 23);
             this.txt_Passphrase.TabIndex = 6;
             this.txt_Passphrase.Text = "P@@sword!!200";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(43, 219);
+            this.label4.Location = new System.Drawing.Point(38, 164);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(70, 20);
+            this.label4.Size = new System.Drawing.Size(57, 15);
             this.label4.TabIndex = 5;
             this.label4.Text = "Password";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(64, 180);
+            this.label3.Location = new System.Drawing.Point(56, 135);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(49, 20);
+            this.label3.Size = new System.Drawing.Size(39, 15);
             this.label3.TabIndex = 4;
             this.label3.Text = "Name";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(33, 141);
+            this.label2.Location = new System.Drawing.Point(29, 106);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(80, 20);
+            this.label2.Size = new System.Drawing.Size(65, 15);
             this.label2.TabIndex = 3;
             this.label2.Text = "Passphrase";
             // 
             // Btn_SelectNetwork
             // 
             this.Btn_SelectNetwork.ForeColor = System.Drawing.Color.Navy;
-            this.Btn_SelectNetwork.Location = new System.Drawing.Point(119, 250);
-            this.Btn_SelectNetwork.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.Btn_SelectNetwork.Location = new System.Drawing.Point(104, 188);
             this.Btn_SelectNetwork.Name = "Btn_SelectNetwork";
-            this.Btn_SelectNetwork.Size = new System.Drawing.Size(158, 34);
+            this.Btn_SelectNetwork.Size = new System.Drawing.Size(138, 26);
             this.Btn_SelectNetwork.TabIndex = 2;
             this.Btn_SelectNetwork.Text = "Select Network";
             this.Btn_SelectNetwork.UseVisualStyleBackColor = true;
@@ -164,10 +160,9 @@
             // btn_GenerateMnemonic
             // 
             this.btn_GenerateMnemonic.ForeColor = System.Drawing.Color.Navy;
-            this.btn_GenerateMnemonic.Location = new System.Drawing.Point(525, 35);
-            this.btn_GenerateMnemonic.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btn_GenerateMnemonic.Location = new System.Drawing.Point(459, 26);
             this.btn_GenerateMnemonic.Name = "btn_GenerateMnemonic";
-            this.btn_GenerateMnemonic.Size = new System.Drawing.Size(136, 93);
+            this.btn_GenerateMnemonic.Size = new System.Drawing.Size(119, 70);
             this.btn_GenerateMnemonic.TabIndex = 2;
             this.btn_GenerateMnemonic.Text = "Generate Mnemonic";
             this.btn_GenerateMnemonic.UseVisualStyleBackColor = true;
@@ -176,20 +171,19 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(34, 39);
+            this.label1.Location = new System.Drawing.Point(30, 29);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(79, 20);
+            this.label1.Size = new System.Drawing.Size(65, 15);
             this.label1.TabIndex = 1;
             this.label1.Text = "Mnemonic";
             // 
             // txt_Mnemonic
             // 
             this.txt_Mnemonic.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txt_Mnemonic.Location = new System.Drawing.Point(119, 35);
-            this.txt_Mnemonic.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.txt_Mnemonic.Location = new System.Drawing.Point(104, 26);
             this.txt_Mnemonic.Multiline = true;
             this.txt_Mnemonic.Name = "txt_Mnemonic";
-            this.txt_Mnemonic.Size = new System.Drawing.Size(400, 93);
+            this.txt_Mnemonic.Size = new System.Drawing.Size(350, 70);
             this.txt_Mnemonic.TabIndex = 0;
             this.txt_Mnemonic.Text = "travel west flush element churn hunt certain need frame noodle aisle slender jewe" +
     "l museum universe amused happy ability lyrics finger behave roast surge zebra";
@@ -198,21 +192,18 @@
             // 
             this.groupBox2.Controls.Add(this.btn_Cancel);
             this.groupBox2.Controls.Add(this.btn_Create);
-            this.groupBox2.Location = new System.Drawing.Point(12, 329);
-            this.groupBox2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.groupBox2.Location = new System.Drawing.Point(10, 247);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox2.Size = new System.Drawing.Size(671, 71);
+            this.groupBox2.Size = new System.Drawing.Size(587, 53);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             // 
             // btn_Cancel
             // 
             this.btn_Cancel.ForeColor = System.Drawing.Color.Red;
-            this.btn_Cancel.Location = new System.Drawing.Point(485, 28);
-            this.btn_Cancel.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btn_Cancel.Location = new System.Drawing.Point(424, 21);
             this.btn_Cancel.Name = "btn_Cancel";
-            this.btn_Cancel.Size = new System.Drawing.Size(86, 31);
+            this.btn_Cancel.Size = new System.Drawing.Size(75, 23);
             this.btn_Cancel.TabIndex = 1;
             this.btn_Cancel.Text = "Cancel";
             this.btn_Cancel.UseVisualStyleBackColor = true;
@@ -220,10 +211,9 @@
             // btn_Create
             // 
             this.btn_Create.ForeColor = System.Drawing.Color.Green;
-            this.btn_Create.Location = new System.Drawing.Point(577, 28);
-            this.btn_Create.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btn_Create.Location = new System.Drawing.Point(505, 21);
             this.btn_Create.Name = "btn_Create";
-            this.btn_Create.Size = new System.Drawing.Size(86, 31);
+            this.btn_Create.Size = new System.Drawing.Size(75, 23);
             this.btn_Create.TabIndex = 0;
             this.btn_Create.Text = "Create";
             this.btn_Create.UseVisualStyleBackColor = true;
@@ -236,15 +226,14 @@
             // FrmCreateWallet
             // 
             this.AcceptButton = this.btn_Create;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btn_Cancel;
-            this.ClientSize = new System.Drawing.Size(693, 410);
+            this.ClientSize = new System.Drawing.Size(606, 308);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FrmCreateWallet";
