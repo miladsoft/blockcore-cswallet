@@ -10,11 +10,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="app.ico" />
+    <Compile Remove="Model\**" />
+    <EmbeddedResource Remove="Model\**" />
+    <None Remove="Model\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Model\" />
+    <Content Include="app.ico" />
   </ItemGroup>
 
   <ItemGroup>
