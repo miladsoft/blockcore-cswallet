@@ -87,8 +87,6 @@ namespace wallet.ui.Elements
             try
             {
                 Btn_getBalance.Enabled = false;
-                Btn_ShowAddress.Enabled = false;
-                Btn_Send.Enabled = false;
                 lbl_status.Text = "calculate balance . wait";
                 DateTime _Strat = DateTime.Now;
 
@@ -104,20 +102,7 @@ namespace wallet.ui.Elements
                 DateTime _End = DateTime.Now;
                 lbl_status.Text = "-";
                 Btn_getBalance.Enabled = true;
-                Btn_ShowAddress.Enabled = true;
-                Btn_Send.Enabled = true;
-            }
-            catch { }
-        }
-
-        private void Btn_ShowAddress_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                FrmAddress _FrmAddress = new FrmAddress();
-                _FrmAddress.MyWallet = MyWallet;
-                _FrmAddress.addressBalances = addressBalances;
-                _FrmAddress.Show();
+                 
             }
             catch { }
         }

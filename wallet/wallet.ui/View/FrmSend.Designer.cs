@@ -80,7 +80,7 @@
             this.Txt_Amount.Name = "Txt_Amount";
             this.Txt_Amount.Size = new System.Drawing.Size(415, 27);
             this.Txt_Amount.TabIndex = 1;
-            this.Txt_Amount.Text = "5";
+            this.Txt_Amount.Text = "2";
             // 
             // label3
             // 
@@ -188,7 +188,7 @@
             this.TxtLog.Size = new System.Drawing.Size(624, 150);
             this.TxtLog.TabIndex = 1;
             // 
-            // FrmWallet
+            // FrmSend
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -197,7 +197,7 @@
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Name = "FrmWallet";
+            this.Name = "FrmSend";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Wallet = ";
             this.Load += new System.EventHandler(this.FrmWallet_Load);

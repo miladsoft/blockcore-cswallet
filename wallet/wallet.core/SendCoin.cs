@@ -19,7 +19,7 @@ namespace wallet.core
 
 
             //  Money avaiableFunds = Money.Parse("8.99990000");
-            Money fundsToSpend = Money.Parse("5");
+            Money fundsToSpend = Money.Parse(_Amount.ToString());
             Money feeForMiner = Money.Parse("0.0001");
 
             Key _myKey;
@@ -47,7 +47,7 @@ namespace wallet.core
             {
 
 
-                coinslist.Add(new Coin(item.Transaction.Id, (uint)item.Transaction.Index, item.Transaction.Amount, item.Transaction.ScriptPubKey));
+                coinslist.Add(new Coin(item.Transaction.Id, (uint)item.Transaction.Index, item.Transaction.Amount, _myKey.ScriptPubKey));
 
             }
             // utxo
@@ -90,21 +90,46 @@ namespace wallet.core
             //                        .Select((o, i) => new Coin(new OutPoint(aliceFunding.GetHash(), i), o))
             //                        .ToArray();
 
+            var signingKeys = new HashSet<ISecret>();
+            var added = new HashSet<HdAddress>();
 
+
+            try
+            {
+                ExtKey extKey = new ExtKey(_myKey, Convert.FromBase64String(MyWallet.ChainCode));
+
+                foreach (Coin coinSpent in coinslist)
+                {
+
+                    HdAddress address = MyWallet.UnspentOutputReferences.First(output => output.ToOutPoint() == coinSpent.Outpoint).Address;
+
+                    BitcoinExtKey addressPrivateKey = extKey.GetWif(network);
+                    signingKeys.Add(addressPrivateKey);
+                    added.Add(address);
+                }
+                //   context.TransactionBuilder.AddKeys(signingKeys.ToArray());
+            }
+            catch { }
 
             var txBuilder = new TransactionBuilder(network);
             
 
             var tx = txBuilder
                 .AddCoins(coinslist)
-                .AddKeys(_myKey)
+                .AddKeys(signingKeys.ToArray())
                 .Send(foreignAddress, fundsToSpend)
                 .SendFees(feeForMiner)
-                .SetChange(ownAddress)                 
-                .BuildTransaction(sign: true);
+                .SetChange(_myKey.ScriptPubKey)                 
+                .BuildTransaction(sign: false);
 
 
-            
+            //tx.Outputs.Add(new TxOut(Money.Coins(sum), myScriptPubKey));
+
+            //Coin[] coins = transaction.Outputs.AsCoins().ToArray();
+
+
+
+
             var resTransaction = txBuilder.Verify(tx, out errors); //check fully signed
 
 
@@ -119,8 +144,10 @@ namespace wallet.core
             return "";
         }
 
+       
 
-        public   void SendCoins1(string _Password , HdAddress _ChangedAdress, string DistanationAddress, WalletFile MyWallet )
+
+        public void SendCoins1(string _Password , HdAddress _ChangedAdress, string DistanationAddress, WalletFile MyWallet )
         {
             Network network = new BlockCoreNetworks().GetNetwork(MyWallet.Network);
             Key key;
@@ -180,14 +207,16 @@ namespace wallet.core
 
 
             var txBuilder = new TransactionBuilder(network);
+            
             var tx = txBuilder
                 .AddCoins(coinslist)
                 .AddKeys(key)              
                 .Send(foreignAddress.ScriptPubKey, fundsToSpend)
                 .SendFees(feeForMiner)
                 .SetChange(ownAddress.ScriptPubKey)
+                .Shuffle()
                 .BuildTransaction(sign: true);
-            // tx.AddInput(new TxIn(outPoints.FirstOrDefault()));
+            //tx.AddInput(new TxIn(outPoints.FirstOrDefault()));
 
 
 
@@ -203,6 +232,152 @@ namespace wallet.core
 
             }
         }
+
+
+
+        public String TXSendCoins(string _Password, String _Amount, HdAddress _ChangedAdress, string DistanationAddress, WalletFile MyWallet)
+        {
+            try
+            {
+                Network network = new BlockCoreNetworks().GetNetwork(MyWallet.Network);
+
+
+                //  Money avaiableFunds = Money.Parse("8.99990000");
+                Money amountToSend = Money.Parse(_Amount.ToString());
+                Money feeForMiner = Money.Parse("0.0001");
+
+                Key _myKey;
+
+                try
+                {
+                    _myKey = NBitcoin.Key.Parse(MyWallet.EncryptedSeed, _Password, network);
+                }
+                catch (Exception ex)
+                {
+
+                    return "";
+                }
+
+                BitcoinAddress addressToSend;
+                try
+                {
+                    addressToSend = BitcoinAddress.Create(DistanationAddress, network);
+                }
+                catch (Exception ex)
+                {
+
+                    return "";
+                }
+
+                ExtKey extKey = new ExtKey(_myKey, Convert.FromBase64String(MyWallet.ChainCode));
+                var signingKeys = new HashSet<ISecret>();
+                var added = new HashSet<HdAddress>();
+
+                var coinsToSpend = new HashSet<Coin>();
+                bool haveEnough = SelectCoins(ref coinsToSpend, amountToSend, MyWallet.UnspentOutputReferences);
+
+
+
+                List<HdAddress> alladress = new List<HdAddress>();
+                alladress.AddRange(MyWallet.hdAccount.InternalAddresses);
+                alladress.AddRange(MyWallet.hdAccount.ExternalAddresses);
+
+                //foreach (var coin in coinsToSpend)
+                //{
+                //    foreach (var elem in alladress)
+                //    {
+                //        if (elem.ScriptPubKey == coin.ScriptPubKey)
+                //        {
+                //            BitcoinExtKey addressPrivateKey = extKey.GetWif(network);
+                //            signingKeys.Add(addressPrivateKey);
+                //        }
+                //    }
+                //}
+                             
+  
+                try
+                {
+                    foreach (Coin coinSpent in coinsToSpend)
+                    {
+                        HdAddress address = MyWallet.UnspentOutputReferences.First(output => output.ToOutPoint() == coinSpent.Outpoint).Address;
+                        if (added.Contains(address))
+                            continue;
+
+
+
+                        ExtKey addressExtKey = extKey.Derive(new KeyPath(address.HdPath));
+                        BitcoinExtKey addressPrivateKey = addressExtKey.GetWif(network);
+                        signingKeys.Add(addressPrivateKey);
+                        added.Add(address);
+
+
+                        //BitcoinExtKey addressPrivateKey = extKey.GetWif(network);
+                        //signingKeys.Add(addressPrivateKey);
+                        //added.Add(address);
+                    }
+
+                }
+                catch { }
+
+
+
+                var builder = new TransactionBuilder(network);
+                var tx = builder
+                    .AddCoins(coinsToSpend)
+                    .AddKeys(signingKeys.ToArray())
+                    .Send(addressToSend, amountToSend)
+                    .SetChange(_ChangedAdress.ScriptPubKey)
+                    .SendFees(feeForMiner)
+                    .BuildTransaction(true);
+
+                TransactionPolicyError[] errors;
+
+
+                var resTransaction = builder.Verify(tx, out errors); //check fully signed
+
+
+                if (resTransaction)
+                {
+                    var _TX = tx.GetHash().ToString();
+                    var transactionHex = tx.ToHex();
+                    return transactionHex;
+
+                }
+
+
+            
+
+
+
+            }
+            catch { }
+
+
+            return "";
+        }
+
+
+        public static bool SelectCoins(ref HashSet<Coin> coinsToSpend, Money totalOutAmount, List<UnspentOutputReference> unspentCoins)
+        {
+            var haveEnough = false;
+            foreach (var coin in unspentCoins.OrderByDescending(x => x.Transaction.Amount))
+            {
+                var _NewCoin = new Coin(coin.Transaction.Id, (uint)coin.Transaction.Index, coin.Transaction.Amount, coin.Transaction.ScriptPubKey);
+
+                coinsToSpend.Add(_NewCoin);
+                // if doesn't reach amount, continue adding next coin
+                if (coinsToSpend.Sum(x => x.Amount) < totalOutAmount) continue;
+                else
+                {
+                    haveEnough = true;
+                    break;
+                }
+            }
+
+            return haveEnough;
+        }
+
+
 
     }
 }

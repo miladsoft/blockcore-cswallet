@@ -24,6 +24,9 @@ namespace wallet.core
             addressBalances = new List<AddressBalance>();
             try
             {
+
+                var _Adress = _WalletFile.hdAccount.GetCombinedAddresses();
+
                 //myDeserializedClass.balance * 0.00000001;
 
                 Double balanceConfirmedAmount = 0;
@@ -37,7 +40,7 @@ namespace wallet.core
                         addressBalances.Add(balance);
                         try
                         {
-                            balanceConfirmedAmount += (balance.balance * 0.00000001);
+                            balanceConfirmedAmount += (balance.balance * 0.00000001);                            
                         }
                         catch { }
                     }
@@ -68,6 +71,9 @@ namespace wallet.core
         {
             try
             {
+                //  http://localhost:15000/
+
+
                 var client = new HttpClient();
                 var request = new HttpRequestMessage
                 {

@@ -43,19 +43,26 @@ namespace wallet.ui.View
 
             try
             {
-                MyWallet.UnspentOutputReferences = await _BlockTransection.GetSpendableTransactions(MyWallet, addressBalances);
+                var _Unspent = await _BlockTransection.GetSpendableTransactions(MyWallet);
+
+                MyWallet.UnspentOutputReferences = _Unspent.ToList();
 
                 var _ChangedAddress = MyWallet.hdAccount.InternalAddresses.FirstOrDefault();
 
                 TransactionPolicyError[] errors = null;
+                String _Hex = "";
 
-                // String _Hex = new SendCoin().SendCoins(Txt_Password.Text, Txt_Amount.Text, _ChangedAddress, Txt_Destination.Text, MyWallet, out errors);
-              String _Hex = "";
-                 new SendCoin().SendCoins1(Txt_Password.Text, _ChangedAddress, Txt_Destination.Text, MyWallet);
+              // _Hex = new SendCoin().SendCoins(Txt_Password.Text, Txt_Amount.Text, _ChangedAddress, Txt_Destination.Text, MyWallet, out errors);
 
-             _BlockTransection.GetTransectionHex(Txt_Destination.Text, _ChangedAddress,  int.Parse(Txt_Amount.Text), Txt_Password.Text, MyWallet, out errors);
+                //    _Hex = new SendCoin().SendCoins1(Txt_Password.Text, _ChangedAddress, Txt_Destination.Text, MyWallet);
+
+           // _Hex = _BlockTransection.GetTransectionHex(Txt_Destination.Text, _ChangedAddress,  int.Parse(Txt_Amount.Text), Txt_Password.Text, MyWallet, out errors);
+ _Hex = new  SendCoin().TXSendCoins(Txt_Password.Text, Txt_Amount.Text, _ChangedAddress, Txt_Destination.Text, MyWallet );
+
+
                 if (_Hex != "")
                 {
+                    Txt_TransactionHex.Text =  _Hex;
                     TxtLog.Text += Environment.NewLine + "Hex is ";
                     TxtLog.Text += _Hex;
                 }
