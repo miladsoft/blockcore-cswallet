@@ -43,11 +43,12 @@ namespace wallet.ui.View
 
             try
             {
+                var _ChangedAddress = MyWallet.hdAccount.ExternalAddresses.FirstOrDefault();
                 var _Unspent = await _BlockTransection.GetSpendableTransactions(MyWallet);
 
                 MyWallet.UnspentOutputReferences = _Unspent.ToList();
 
-                var _ChangedAddress = MyWallet.hdAccount.InternalAddresses.FirstOrDefault();
+             
 
                 TransactionPolicyError[] errors = null;
                 String _Hex = "";

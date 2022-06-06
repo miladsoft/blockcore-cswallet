@@ -1,4 +1,5 @@
-﻿using Blockcore.Consensus.TransactionInfo;
+﻿using Blockcore.Consensus.ScriptInfo;
+using Blockcore.Consensus.TransactionInfo;
 using Blockcore.Features.Wallet.Types;
 using Blockcore.Networks;
 using NBitcoin;
@@ -274,7 +275,7 @@ namespace wallet.core
                 var added = new HashSet<HdAddress>();
 
                 var coinsToSpend = new HashSet<Coin>();
-                bool haveEnough = SelectCoins(ref coinsToSpend, amountToSend, MyWallet.UnspentOutputReferences);
+                bool haveEnough = SelectCoins(ref coinsToSpend, amountToSend + 1, MyWallet.UnspentOutputReferences);
 
 
 
@@ -319,6 +320,16 @@ namespace wallet.core
                 }
                 catch { }
 
+                Script _IDes = new BitcoinWitPubKeyAddress(_ChangedAdress.Bech32Address, network).ScriptPubKey;
+
+                if (addressToSend.ScriptPubKey.IsScriptType(ScriptType.Witness) == true)
+                {
+                   
+                }
+                else
+                {
+                    _IDes = _ChangedAdress.ScriptPubKey;
+                }
 
 
                 var builder = new TransactionBuilder(network);
@@ -326,7 +337,7 @@ namespace wallet.core
                     .AddCoins(coinsToSpend)
                     .AddKeys(signingKeys.ToArray())
                     .Send(addressToSend, amountToSend)
-                    .SetChange(_ChangedAdress.ScriptPubKey)
+                    .SetChange(_IDes) // .SetChange(_ChangedAdress.ScriptPubKey)
                     .SendFees(feeForMiner)
                     .BuildTransaction(true);
 
