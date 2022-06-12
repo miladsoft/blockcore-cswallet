@@ -102,9 +102,22 @@ namespace wallet.ui.Elements
                 DateTime _End = DateTime.Now;
                 lbl_status.Text = "-";
                 Btn_getBalance.Enabled = true;
-                 
+
             }
             catch { }
+        }
+
+        private void Btn_Addresses_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                FrmAddress _FrmAddress = new FrmAddress();
+                _FrmAddress.MyWallet = MyWallet;
+                _FrmAddress.addressBalances = addressBalances;
+                _FrmAddress.Show();
+            }
+            catch { }
+
         }
     }
 }

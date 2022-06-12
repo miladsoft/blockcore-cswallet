@@ -40,6 +40,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.lbl_walletname = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.Btn_Addresses = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -49,6 +50,7 @@
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.Btn_Addresses);
             this.panel1.Controls.Add(this.Btn_getBalance);
             this.panel1.Controls.Add(this.Btn_Send);
             this.panel1.Controls.Add(this.lbl_UnConfirmed);
@@ -172,6 +174,19 @@
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
+            // Btn_Addresses
+            // 
+            this.Btn_Addresses.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.Btn_Addresses.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.Btn_Addresses.Location = new System.Drawing.Point(305, 44);
+            this.Btn_Addresses.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.Btn_Addresses.Name = "Btn_Addresses";
+            this.Btn_Addresses.Size = new System.Drawing.Size(74, 22);
+            this.Btn_Addresses.TabIndex = 4;
+            this.Btn_Addresses.Text = "Addresses";
+            this.Btn_Addresses.UseVisualStyleBackColor = true;
+            this.Btn_Addresses.Click += new System.EventHandler(this.Btn_Addresses_Click);
+            // 
             // WalletItem
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -201,5 +216,6 @@
         private Button Btn_Send;
         private Button Btn_getBalance;
         private Label lbl_status;
+        private Button Btn_Addresses;
     }
 }
